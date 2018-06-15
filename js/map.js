@@ -101,13 +101,15 @@ var generateAds = function (number) {
   var similarAds = [];
 
   for (var i = 0; i < number; i++) {
+    var randomX = getRandomNumber(300, 900);
+    var randomY = getRandomNumber(130, 630);
     var adFeatures = {
       author: {
         avatar: 'img/avatars/user0' + (i + 1) + '.png'
       },
       offer: {
         title: shuffledTitles[0],
-        address: getRandomNumber(300, 900) + ' ' + getRandomNumber(130, 630),
+        address: randomX + ' ' + randomY,
         price: getRandomNumber(price.min, price.max),
         type: getRandomElement(TYPES),
         rooms: getRandomNumber(rooms.min, rooms.max),
@@ -119,8 +121,8 @@ var generateAds = function (number) {
         photos: shuffleArray(PHOTOS)
       },
       location: {
-        x: getRandomNumber(300, 900),
-        y: getRandomNumber(130, 630)
+        x: randomX,
+        y: randomY
       }
     };
 
@@ -199,22 +201,13 @@ var filters = map.querySelector('.map__filters-container');
 var renderCard = function (advert) {
   var adElement = adTemplate.cloneNode(true);
   adElement.querySelector('.popup__title').textContent = advert.offer.title;
-  adElement.querySelector('.popup__text--address').textContent =
-    advert.offer.address;
-  adElement.querySelector('.popup__text--price').textContent =
-    advert.offer.price + '₽/ночь';
-  adElement.querySelector('.popup__type').textContent =
-    titleByType[advert.offer.type];
-  adElement.querySelector('.popup__text--capacity').textContent =
-    advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
-  adElement.querySelector('.popup__text--time').textContent =
-    'Заезд после ' +
-    advert.offer.checkin +
-    ', выезд до ' +
-    advert.offer.checkout;
+  adElement.querySelector('.popup__text--address').textContent = advert.offer.address;
+  adElement.querySelector('.popup__text--price').textContent = advert.offer.price + '₽/ночь';
+  adElement.querySelector('.popup__type').textContent = titleByType[advert.offer.type];
+  adElement.querySelector('.popup__text--capacity').textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
+  adElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
   addFeatures(adElement.querySelector('.popup__features'), advert.offer.features);
-  adElement.querySelector('.popup__description').textContent =
-    advert.offer.description;
+  adElement.querySelector('.popup__description').textContent = advert.offer.description;
   addPhotos(adElement.querySelector('.popup__photos'), advert.offer.photos);
   adElement.querySelector('.popup__avatar').src = advert.author.avatar;
 
