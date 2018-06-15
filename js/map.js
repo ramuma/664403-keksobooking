@@ -64,17 +64,6 @@ var shuffleArray = function (array) {
 
 var shuffledTitles = shuffleArray(TITLES);
 
-// Случайная ссылка на аватар
-var createAvatarsArray = function () {
-  var newArray = [];
-  for (var i = 0; i < adsNumber; i++) {
-    newArray.push(i + 1);
-  }
-  return newArray;
-};
-
-var shuffledAvatars = createAvatarsArray();
-
 // Случайное число в определенном диапазоне
 var getRandomNumber = function (min, max) {
   var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -109,19 +98,16 @@ var titleByType = {
 
 // Массив похожих объявлений
 var generateAds = function (number) {
-  var randomX = getRandomNumber(300, 900);
-  var randomY = getRandomNumber(130, 630);
-
   var similarAds = [];
 
   for (var i = 0; i < number; i++) {
     var adFeatures = {
       author: {
-        avatar: 'img/avatars/user0' + shuffledAvatars[0] + '.png'
+        avatar: 'img/avatars/user0' + (i + 1) + '.png'
       },
       offer: {
         title: shuffledTitles[0],
-        address: randomX + ' ' + randomY,
+        address: getRandomNumber(300, 900) + ' ' + getRandomNumber(130, 630),
         price: getRandomNumber(price.min, price.max),
         type: getRandomElement(TYPES),
         rooms: getRandomNumber(rooms.min, rooms.max),
@@ -133,8 +119,8 @@ var generateAds = function (number) {
         photos: shuffleArray(PHOTOS)
       },
       location: {
-        x: randomX,
-        y: randomY
+        x: getRandomNumber(300, 900),
+        y: getRandomNumber(130, 630)
       }
     };
 
@@ -177,7 +163,7 @@ var renderPins = function () {
 
 // Добавляем фотографии
 
-function addPhotos(adPhotos, photoArray) {
+var addPhotos = function (adPhotos, photoArray) {
   var photo = adPhotos.querySelector('.popup__photo');
   photo.src = photoArray[0];
   adPhotos.appendChild(photo);
@@ -186,13 +172,13 @@ function addPhotos(adPhotos, photoArray) {
     newPhoto.src = photoArray[i];
     adPhotos.appendChild(newPhoto);
   }
-}
+};
 
 // Добавляем список доступных удобств
 
-function removeChildren(parent) {
+var removeChildren = function (parent) {
   parent.innerHTML = '';
-}
+};
 
 var addFeatures = function (ul, featuresArray) {
   removeChildren(ul);
@@ -213,13 +199,22 @@ var filters = map.querySelector('.map__filters-container');
 var renderCard = function (advert) {
   var adElement = adTemplate.cloneNode(true);
   adElement.querySelector('.popup__title').textContent = advert.offer.title;
-  adElement.querySelector('.popup__text--address').textContent = advert.offer.address;
-  adElement.querySelector('.popup__text--price').textContent = advert.offer.price + '₽/ночь';
-  adElement.querySelector('.popup__type').textContent = titleByType[advert.offer.type];
-  adElement.querySelector('.popup__text--capacity').textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
-  adElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
+  adElement.querySelector('.popup__text--address').textContent =
+    advert.offer.address;
+  adElement.querySelector('.popup__text--price').textContent =
+    advert.offer.price + '₽/ночь';
+  adElement.querySelector('.popup__type').textContent =
+    titleByType[advert.offer.type];
+  adElement.querySelector('.popup__text--capacity').textContent =
+    advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
+  adElement.querySelector('.popup__text--time').textContent =
+    'Заезд после ' +
+    advert.offer.checkin +
+    ', выезд до ' +
+    advert.offer.checkout;
   addFeatures(adElement.querySelector('.popup__features'), advert.offer.features);
-  adElement.querySelector('.popup__description').textContent = advert.offer.description;
+  adElement.querySelector('.popup__description').textContent =
+    advert.offer.description;
   addPhotos(adElement.querySelector('.popup__photos'), advert.offer.photos);
   adElement.querySelector('.popup__avatar').src = advert.author.avatar;
 
