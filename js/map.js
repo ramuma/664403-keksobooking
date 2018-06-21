@@ -63,8 +63,6 @@ var adForm = document.querySelector('.ad-form');
 var addressInput = document.getElementById('address');
 var mainPinX = Math.round(parseInt(mainPin.style.left, 10) + MAIN_PIN.WIDTH / 2);
 var mainPinYCenter = Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN.HEIGHT / 2);
-
-// Координаты дефолтной метки по острому концу
 var mainPinYPointed = Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN.HEIGHT + MAIN_PIN.TAIL);
 
 // Тасование массива
