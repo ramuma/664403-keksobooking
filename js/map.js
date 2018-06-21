@@ -1,6 +1,18 @@
 'use strict';
 
-var adsNumber = 8;
+var PIN = {
+  WIDTH: 50,
+  HEIGHT: 70
+};
+
+var MAIN_PIN = {
+  WIDTH: 62,
+  HEIGHT: 62,
+  TAIL: 22
+};
+
+var ENTER_KEYCODE = 13;
+
 var TITLES = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -27,6 +39,8 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
+var adsNumber = 8;
+
 var price = {
   min: 1000,
   max: 1000000
@@ -42,19 +56,16 @@ var guests = {
   max: 10
 };
 
-var PIN = {
-  WIDTH: 50,
-  HEIGHT: 70
-};
-
-var MAIN_PIN = {
-  WIDTH: 65,
-  HEIGHT: 65
-};
-
-var ENTER_KEYCODE = 13;
-
 var map = document.querySelector('.map');
+var adFormInput = document.querySelectorAll('.ad-form fieldset');
+var mainPin = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var addressInput = document.getElementById('address');
+var mainPinX = Math.round(parseInt(mainPin.style.left, 10) + MAIN_PIN.WIDTH / 2);
+var mainPinYCenter = Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN.HEIGHT / 2);
+
+// Координаты дефолтной метки по острому концу
+var mainPinYPointed = Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN.HEIGHT + MAIN_PIN.TAIL);
 
 // Тасование массива
 var shuffleArray = function (array) {
@@ -152,6 +163,10 @@ var createPin = function (mapPin) {
   pinElement.querySelector('img').alt = mapPin.offer.title;
   // Добавляем обработчик для показа объявления
   pinElement.addEventListener('click', function () {
+    var card = map.querySelector('.map__card');
+    if (card) {
+      card.remove();
+    }
     renderCard(mapPin);
   });
   return pinElement;
@@ -224,20 +239,14 @@ var renderCard = function (advert) {
   closeButton.addEventListener('click', function () {
     adElement.classList.add('hidden');
   });
-  closeButton.addEventListener('keydown', function (evt) {
+  closeButton.addEventListener('click', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       adElement.classList.add('hidden');
     }
   });
-
 };
 
 // Функция для активации страницы
-var adFormInput = document.querySelectorAll('.ad-form fieldset');
-var mainPin = document.querySelector('.map__pin--main');
-var adForm = document.querySelector('.ad-form');
-
-
 var activatePage = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
@@ -247,19 +256,25 @@ var activatePage = function () {
   }
 };
 
-// Функция для заполения поля адреса
-var fillAddress = function () {
-  var coordX = parseInt(mainPin.style.left, 10) + MAIN_PIN.WIDTH / 2;
-  var coordY = parseInt(mainPin.style.top, 10) + MAIN_PIN.HEIGHT;
-  document.getElementById('address').value = coordX + ', ' + coordY;
+// Функция для заполнения поля адреса
+var fillAddress = function (coordX, coordY) {
+  addressInput.value = coordX + ', ' + coordY;
+};
+
+// Заполнение адреса при открытии страницы
+window.onload = function () {
+  fillAddress(mainPinX, mainPinYCenter);
+};
+
+var isMapActive = function () {
+  return !(map.classList.contains('map--faded'));
 };
 
 // Вызов функций при событии mouseup
 mainPin.addEventListener('mouseup', function () {
-  activatePage();
-  fillAddress();
-  renderPins();
+  if (!isMapActive()) {
+    activatePage();
+    renderPins();
+    fillAddress(mainPinX, mainPinYPointed);
+  }
 });
-
-// Просмотр подробной информации о похожих объявлениях
-
