@@ -11,8 +11,6 @@ var MAIN_PIN = {
   TAIL: 22
 };
 
-var ENTER_KEYCODE = 13;
-
 var TITLES = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -57,10 +55,10 @@ var guests = {
 };
 
 var map = document.querySelector('.map');
-var adFormInput = document.querySelectorAll('.ad-form fieldset');
-var mainPin = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
-var addressInput = document.getElementById('address');
+var adFormInput = adForm.querySelectorAll('.ad-form fieldset');
+var mainPin = map.querySelector('.map__pin--main');
+var addressInput = adForm.querySelector('#address');
 var mainPinX = Math.round(parseInt(mainPin.style.left, 10) + MAIN_PIN.WIDTH / 2);
 var mainPinYCenter = Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN.HEIGHT / 2);
 var mainPinYPointed = Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN.HEIGHT + MAIN_PIN.TAIL);
@@ -237,11 +235,7 @@ var renderCard = function (advert) {
   closeButton.addEventListener('click', function () {
     adElement.classList.add('hidden');
   });
-  closeButton.addEventListener('click', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      adElement.classList.add('hidden');
-    }
-  });
+  return adElement;
 };
 
 // Функция для активации страницы
@@ -275,4 +269,104 @@ mainPin.addEventListener('mouseup', function () {
     renderPins();
     fillAddress(mainPinX, mainPinYPointed);
   }
+});
+
+// ========= ДОВЕРЯЙ НО ПРОВЕРЯЙ ==============
+
+// Зависимость минимального значения поля «Цена за ночь» от типа жилья
+var typeOfAccommodation = adForm.querySelector('#type');
+var priceInput = adForm.querySelector('#price');
+
+var minPrice = {
+  bungalo: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+};
+
+typeOfAccommodation.onchange = function () {
+  var accomodationMinPrice = minPrice[typeOfAccommodation.value];
+  priceInput.setAttribute('min', accomodationMinPrice);
+  priceInput.setAttribute('placeholder', accomodationMinPrice);
+};
+
+// Синхронизированы поля «Время заезда» и «Время выезда»
+var checkinSelect = adForm.querySelector('#timein');
+var checkoutSelect = adForm.querySelector('#timeout');
+
+var changeTime = function (check, index) {
+  check.selectedIndex = index;
+};
+
+var checkinChangeHandler = function () {
+  changeTime(checkoutSelect, checkinSelect.selectedIndex);
+};
+
+var checkoutChangeHandler = function () {
+  changeTime(checkinSelect, checkoutSelect.selectedIndex);
+};
+
+checkinSelect.addEventListener('change', checkinChangeHandler);
+checkoutSelect.addEventListener('change', checkoutChangeHandler);
+
+// Поле «Количество комнат» синхронизировано с полем «Количество мест»
+var roomSelect = adForm.querySelector('#room_number');
+var capacitySelect = adForm.querySelector('#capacity');
+var submitButton = document.querySelector('.ad-form__submit');
+
+var guestsNumberByPlace = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0]
+};
+
+var checkRoomCapacity = function () {
+  var roomGuests = guestsNumberByPlace[roomSelect.value];
+  if (roomGuests.indexOf(+capacitySelect.value) === -1) {
+    capacitySelect.setCustomValidity('Количество гостей не соответствует количеству комнат');
+  } else {
+    capacitySelect.setCustomValidity('');
+  }
+};
+
+submitButton.addEventListener('click', function () {
+  checkRoomCapacity();
+});
+
+// Нажатие на кнопку .ad-form__reset сбрасывает страницу в исходное неактивное состояние без перезагрузки
+var formReset = adForm.querySelector('.ad-form__reset');
+
+var removePins = function () {
+  var pinsList = pinList.querySelectorAll('button:not(.map__pin--main)');
+  for (var j = 0; j < pinsList.length; j++) {
+    pinsList[j].remove();
+  }
+};
+
+var removeAds = function () {
+  var adsList = map.querySelectorAll('article.map__card');
+  if (adsList) {
+    for (var k = 0; k < adsList.length; k++) {
+      adsList[k].classList.add('hidden');
+    }
+  }
+};
+
+var resetPage = function () {
+  map.classList.add('map--faded');
+  adForm.classList.add('ad-form--disabled');
+
+  for (var i = 0; i < adFormInput.length; i++) {
+    adFormInput[i].setAttribute('disabled', true);
+  }
+  adForm.reset();
+  removePins();
+  removeAds();
+  fillAddress(mainPinX, mainPinYCenter);
+};
+
+formReset.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  resetPage();
 });
