@@ -37,8 +37,6 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-var ESC_KEYCODE = 27;
-
 var adsNumber = 8;
 
 var price = {
