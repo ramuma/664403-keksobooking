@@ -37,6 +37,8 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
+var ESC_KEYCODE = 27;
+
 var adsNumber = 8;
 
 var price = {
@@ -254,9 +256,11 @@ var fillAddress = function (coordX, coordY) {
 };
 
 // Заполнение адреса при открытии страницы
-window.onload = function () {
+var fillingAddressHandler = function () {
   fillAddress(mainPinX, mainPinYCenter);
 };
+
+document.addEventListener('DOMContentLoaded', fillingAddressHandler);
 
 var isMapActive = function () {
   return !(map.classList.contains('map--faded'));
@@ -284,11 +288,13 @@ var minPrice = {
   palace: 10000
 };
 
-typeOfAccommodation.onchange = function () {
+var accomodationChangeHandler = function () {
   var accomodationMinPrice = minPrice[typeOfAccommodation.value];
   priceInput.setAttribute('min', accomodationMinPrice);
   priceInput.setAttribute('placeholder', accomodationMinPrice);
 };
+
+typeOfAccommodation.addEventListener('change', accomodationChangeHandler);
 
 // Синхронизированы поля «Время заезда» и «Время выезда»
 var checkinSelect = adForm.querySelector('#timein');
@@ -312,7 +318,7 @@ checkoutSelect.addEventListener('change', checkoutChangeHandler);
 // Поле «Количество комнат» синхронизировано с полем «Количество мест»
 var roomSelect = adForm.querySelector('#room_number');
 var capacitySelect = adForm.querySelector('#capacity');
-var submitButton = document.querySelector('.ad-form__submit');
+var submitButton = adForm.querySelector('.ad-form__submit');
 
 var guestsNumberByPlace = {
   1: [1],
