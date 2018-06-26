@@ -37,6 +37,8 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
+var ESC_KEYCODE = 27;
+
 var adsNumber = 8;
 
 var price = {
@@ -151,6 +153,7 @@ var pinTemplate = document
   .content.querySelector('.map__pin');
 
 // Создайте DOM-элементы, соответствующие меткам на карте, и заполните их данными из массива. Итоговую разметку метки .map__pin можно взять из шаблона .map__card
+var card = map.querySelector('.map__card');
 var createPin = function (mapPin) {
   var pinElement = pinTemplate.cloneNode(true);
   pinElement.style.left = mapPin.location.x - PIN.WIDTH / 2 + 'px';
@@ -159,13 +162,24 @@ var createPin = function (mapPin) {
   pinElement.querySelector('img').alt = mapPin.offer.title;
   // Добавляем обработчик для показа объявления
   pinElement.addEventListener('click', function () {
-    var card = map.querySelector('.map__card');
     if (card) {
       card.remove();
     }
     renderCard(mapPin);
+    document.addEventListener('keydown', escPressHandler);
   });
   return pinElement;
+};
+
+var escPressHandler = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeCard();
+  }
+};
+
+var closeCard = function () {
+  document.querySelector('.map__card').remove();
+  document.removeEventListener('keydown', escPressHandler);
 };
 
 var ads = generateAds(adsNumber);
@@ -333,9 +347,17 @@ var checkRoomCapacity = function () {
     capacitySelect.setCustomValidity('');
   }
 };
-
+var inputs = adForm.querySelectorAll('input');
 submitButton.addEventListener('click', function () {
   checkRoomCapacity();
+  for (var i = 0; i < inputs.length; i++) {
+
+    var input = inputs[i];
+    if (input.checkValidity() === false) {
+      input.style.borderColor = 'red';
+      input.style.borderWidth = '3px';
+    }
+  }
 });
 
 // Нажатие на кнопку .ad-form__reset сбрасывает страницу в исходное неактивное состояние без перезагрузки
