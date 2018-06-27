@@ -61,6 +61,7 @@ var adForm = document.querySelector('.ad-form');
 var adFormInput = adForm.querySelectorAll('.ad-form fieldset');
 var mainPin = map.querySelector('.map__pin--main');
 var addressInput = adForm.querySelector('#address');
+var titleInput = adForm.querySelector('#title');
 var mainPinX = Math.round(parseInt(mainPin.style.left, 10) + MAIN_PIN.WIDTH / 2);
 var mainPinYCenter = Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN.HEIGHT / 2);
 var mainPinYPointed = Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN.HEIGHT + MAIN_PIN.TAIL);
@@ -153,7 +154,6 @@ var pinTemplate = document
   .content.querySelector('.map__pin');
 
 // Создайте DOM-элементы, соответствующие меткам на карте, и заполните их данными из массива. Итоговую разметку метки .map__pin можно взять из шаблона .map__card
-var card = map.querySelector('.map__card');
 var createPin = function (mapPin) {
   var pinElement = pinTemplate.cloneNode(true);
   pinElement.style.left = mapPin.location.x - PIN.WIDTH / 2 + 'px';
@@ -162,6 +162,7 @@ var createPin = function (mapPin) {
   pinElement.querySelector('img').alt = mapPin.offer.title;
   // Добавляем обработчик для показа объявления
   pinElement.addEventListener('click', function () {
+    var card = map.querySelector('.map__card');
     if (card) {
       card.remove();
     }
@@ -343,21 +344,44 @@ var checkRoomCapacity = function () {
   var roomGuests = guestsNumberByPlace[roomSelect.value];
   if (roomGuests.indexOf(+capacitySelect.value) === -1) {
     capacitySelect.setCustomValidity('Количество гостей не соответствует количеству комнат');
+    addError(capacitySelect);
   } else {
     capacitySelect.setCustomValidity('');
   }
 };
+
+var addError = function (field) {
+  field.style.borderColor = 'red';
+  field.style.borderWidth = '3px';
+};
+
+var removeError = function (field) {
+  field.style.borderColor = '';
+  field.style.borderWidth = '';
+};
+
 var inputs = adForm.querySelectorAll('input');
+
 submitButton.addEventListener('click', function () {
   checkRoomCapacity();
   for (var i = 0; i < inputs.length; i++) {
-
     var input = inputs[i];
     if (input.checkValidity() === false) {
-      input.style.borderColor = 'red';
-      input.style.borderWidth = '3px';
+      addError(input);
     }
   }
+});
+
+priceInput.addEventListener('focus', function () {
+  removeError(priceInput);
+});
+
+titleInput.addEventListener('focus', function () {
+  removeError(titleInput);
+});
+
+capacitySelect.addEventListener('focus', function () {
+  removeError(capacitySelect);
 });
 
 // Нажатие на кнопку .ad-form__reset сбрасывает страницу в исходное неактивное состояние без перезагрузки
