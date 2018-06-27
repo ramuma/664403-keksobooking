@@ -248,7 +248,7 @@ var renderCard = function (advert) {
   // Закрываем попап
   var closeButton = adElement.querySelector('.popup__close');
   closeButton.addEventListener('click', function () {
-    adElement.classList.add('hidden');
+    closeCard();
   });
   return adElement;
 };
@@ -347,6 +347,7 @@ var checkRoomCapacity = function () {
     addError(capacitySelect);
   } else {
     capacitySelect.setCustomValidity('');
+    removeError(capacitySelect);
   }
 };
 
@@ -372,16 +373,28 @@ submitButton.addEventListener('click', function () {
   }
 });
 
-priceInput.addEventListener('focus', function () {
-  removeError(priceInput);
+titleInput.addEventListener('keyup', function () {
+  if (titleInput.validity.valid) {
+    removeError(titleInput);
+  }
 });
 
-titleInput.addEventListener('focus', function () {
-  removeError(titleInput);
+priceInput.addEventListener('keyup', function () {
+  if (priceInput.validity.valid) {
+    removeError(priceInput);
+  }
 });
 
-capacitySelect.addEventListener('focus', function () {
-  removeError(capacitySelect);
+capacitySelect.addEventListener('change', function () {
+  if (capacitySelect.validity.valid) {
+    removeError(capacitySelect);
+  }
+});
+
+roomSelect.addEventListener('change', function () {
+  if (roomSelect.validity.valid) {
+    removeError(capacitySelect);
+  }
 });
 
 // Нажатие на кнопку .ad-form__reset сбрасывает страницу в исходное неактивное состояние без перезагрузки
