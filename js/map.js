@@ -161,14 +161,16 @@ var createPin = function (mapPin) {
   pinElement.querySelector('img').src = mapPin.author.avatar;
   pinElement.querySelector('img').alt = mapPin.offer.title;
   // Добавляем обработчик для показа объявления
-  pinElement.addEventListener('click', function () {
+  var pinElementClickHandler = function () {
     var card = map.querySelector('.map__card');
     if (card) {
       card.remove();
     }
     renderCard(mapPin);
     document.addEventListener('keydown', escPressHandler);
-  });
+  };
+  pinElement.addEventListener('click', pinElementClickHandler);
+
   return pinElement;
 };
 
@@ -247,9 +249,10 @@ var renderCard = function (advert) {
 
   // Закрываем попап
   var closeButton = adElement.querySelector('.popup__close');
-  closeButton.addEventListener('click', function () {
+  var closeButtonClickHandler = function () {
     closeCard();
-  });
+  };
+  closeButton.addEventListener('click', closeButtonClickHandler);
   return adElement;
 };
 
@@ -282,6 +285,7 @@ var isMapActive = function () {
 // Вызов функций при событии mouseup
 mainPin.addEventListener('mouseup', function () {
   if (!isMapActive()) {
+    document.removeEventListener('DOMContentLoaded', fillingAddressHandler);
     activatePage();
     renderPins();
     fillAddress(mainPinX, mainPinYPointed);
@@ -363,7 +367,7 @@ var removeError = function (field) {
 
 var inputs = adForm.querySelectorAll('input');
 
-submitButton.addEventListener('click', function () {
+var submitButtonClickHandler = function () {
   checkRoomCapacity();
   for (var i = 0; i < inputs.length; i++) {
     var input = inputs[i];
@@ -371,31 +375,38 @@ submitButton.addEventListener('click', function () {
       addError(input);
     }
   }
-});
+};
 
-titleInput.addEventListener('keyup', function () {
+submitButton.addEventListener('click', submitButtonClickHandler);
+
+var titleInputKeyupHandler = function () {
   if (titleInput.validity.valid) {
     removeError(titleInput);
   }
-});
+};
 
-priceInput.addEventListener('keyup', function () {
+var priceInputKeyupHandler = function () {
   if (priceInput.validity.valid) {
-    removeError(priceInput);
+    removeError(titleInput);
   }
-});
+};
 
-capacitySelect.addEventListener('change', function () {
+var capacitySelectChangeHandler = function () {
   if (capacitySelect.validity.valid) {
     removeError(capacitySelect);
   }
-});
+};
 
-roomSelect.addEventListener('change', function () {
+var roomSelectChangeHandler = function () {
   if (roomSelect.validity.valid) {
     removeError(capacitySelect);
   }
-});
+};
+
+titleInput.addEventListener('keyup', titleInputKeyupHandler);
+priceInput.addEventListener('keyup', priceInputKeyupHandler);
+capacitySelect.addEventListener('change', capacitySelectChangeHandler);
+roomSelect.addEventListener('change', roomSelectChangeHandler);
 
 // Нажатие на кнопку .ad-form__reset сбрасывает страницу в исходное неактивное состояние без перезагрузки
 var formReset = adForm.querySelector('.ad-form__reset');
@@ -427,6 +438,17 @@ var resetPage = function () {
   removePins();
   removeAds();
   fillAddress(mainPinX, mainPinYCenter);
+  removeError(titleInput);
+  removeError(priceInput);
+  removeError(capacitySelect);
+  typeOfAccommodation.removeEventListener('change', accomodationChangeHandler);
+  checkinSelect.removeEventListener('change', checkinChangeHandler);
+  checkoutSelect.removeEventListener('change', checkoutChangeHandler);
+  submitButton.removeEventListener('click', submitButtonClickHandler);
+  titleInput.removeEventListener('keyup', titleInputKeyupHandler);
+  priceInput.removeEventListener('keyup', priceInputKeyupHandler);
+  capacitySelect.removeEventListener('change', capacitySelectChangeHandler);
+  roomSelect.removeEventListener('change', roomSelectChangeHandler);
 };
 
 formReset.addEventListener('click', function (evt) {
