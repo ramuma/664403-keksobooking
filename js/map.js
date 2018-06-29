@@ -289,6 +289,14 @@ mainPin.addEventListener('mouseup', function () {
     activatePage();
     renderPins();
     fillAddress(mainPinX, mainPinYPointed);
+    typeOfAccommodation.addEventListener('change', accomodationChangeHandler);
+    checkinSelect.addEventListener('change', checkinChangeHandler);
+    checkoutSelect.addEventListener('change', checkoutChangeHandler);
+    submitButton.addEventListener('click', submitButtonClickHandler);
+    titleInput.addEventListener('keyup', titleInputKeyupHandler);
+    priceInput.addEventListener('keyup', priceInputKeyupHandler);
+    capacitySelect.addEventListener('change', capacitySelectChangeHandler);
+    roomSelect.addEventListener('change', roomSelectChangeHandler);
   }
 });
 
@@ -311,8 +319,6 @@ var accomodationChangeHandler = function () {
   priceInput.setAttribute('placeholder', accomodationMinPrice);
 };
 
-typeOfAccommodation.addEventListener('change', accomodationChangeHandler);
-
 // Синхронизированы поля «Время заезда» и «Время выезда»
 var checkinSelect = adForm.querySelector('#timein');
 var checkoutSelect = adForm.querySelector('#timeout');
@@ -328,9 +334,6 @@ var checkinChangeHandler = function () {
 var checkoutChangeHandler = function () {
   changeTime(checkinSelect, checkoutSelect.selectedIndex);
 };
-
-checkinSelect.addEventListener('change', checkinChangeHandler);
-checkoutSelect.addEventListener('change', checkoutChangeHandler);
 
 // Поле «Количество комнат» синхронизировано с полем «Количество мест»
 var roomSelect = adForm.querySelector('#room_number');
@@ -377,8 +380,6 @@ var submitButtonClickHandler = function () {
   }
 };
 
-submitButton.addEventListener('click', submitButtonClickHandler);
-
 var titleInputKeyupHandler = function () {
   if (titleInput.validity.valid) {
     removeError(titleInput);
@@ -387,7 +388,7 @@ var titleInputKeyupHandler = function () {
 
 var priceInputKeyupHandler = function () {
   if (priceInput.validity.valid) {
-    removeError(titleInput);
+    removeError(priceInput);
   }
 };
 
@@ -402,11 +403,6 @@ var roomSelectChangeHandler = function () {
     removeError(capacitySelect);
   }
 };
-
-titleInput.addEventListener('keyup', titleInputKeyupHandler);
-priceInput.addEventListener('keyup', priceInputKeyupHandler);
-capacitySelect.addEventListener('change', capacitySelectChangeHandler);
-roomSelect.addEventListener('change', roomSelectChangeHandler);
 
 // Нажатие на кнопку .ad-form__reset сбрасывает страницу в исходное неактивное состояние без перезагрузки
 var formReset = adForm.querySelector('.ad-form__reset');
