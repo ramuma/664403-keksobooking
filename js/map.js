@@ -11,8 +11,6 @@ var MAIN_PIN = {
   TAIL: 22
 };
 
-var ENTER_KEYCODE = 13;
-
 var TITLES = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -39,6 +37,8 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
+var ESC_KEYCODE = 27;
+
 var adsNumber = 8;
 
 var price = {
@@ -57,10 +57,11 @@ var guests = {
 };
 
 var map = document.querySelector('.map');
-var adFormInput = document.querySelectorAll('.ad-form fieldset');
-var mainPin = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
-var addressInput = document.getElementById('address');
+var adFormInput = adForm.querySelectorAll('.ad-form fieldset');
+var mainPin = map.querySelector('.map__pin--main');
+var addressInput = adForm.querySelector('#address');
+var titleInput = adForm.querySelector('#title');
 var mainPinX = Math.round(parseInt(mainPin.style.left, 10) + MAIN_PIN.WIDTH / 2);
 var mainPinYCenter = Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN.HEIGHT / 2);
 var mainPinYPointed = Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN.HEIGHT + MAIN_PIN.TAIL);
@@ -160,14 +161,28 @@ var createPin = function (mapPin) {
   pinElement.querySelector('img').src = mapPin.author.avatar;
   pinElement.querySelector('img').alt = mapPin.offer.title;
   // Добавляем обработчик для показа объявления
-  pinElement.addEventListener('click', function () {
+  var pinElementClickHandler = function () {
     var card = map.querySelector('.map__card');
     if (card) {
       card.remove();
     }
     renderCard(mapPin);
-  });
+    document.addEventListener('keydown', escPressHandler);
+  };
+  pinElement.addEventListener('click', pinElementClickHandler);
+
   return pinElement;
+};
+
+var escPressHandler = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeCard();
+  }
+};
+
+var closeCard = function () {
+  document.querySelector('.map__card').remove();
+  document.removeEventListener('keydown', escPressHandler);
 };
 
 var ads = generateAds(adsNumber);
@@ -234,14 +249,11 @@ var renderCard = function (advert) {
 
   // Закрываем попап
   var closeButton = adElement.querySelector('.popup__close');
-  closeButton.addEventListener('click', function () {
-    adElement.classList.add('hidden');
-  });
-  closeButton.addEventListener('click', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      adElement.classList.add('hidden');
-    }
-  });
+  var closeButtonClickHandler = function () {
+    closeCard();
+  };
+  closeButton.addEventListener('click', closeButtonClickHandler);
+  return adElement;
 };
 
 // Функция для активации страницы
@@ -260,9 +272,11 @@ var fillAddress = function (coordX, coordY) {
 };
 
 // Заполнение адреса при открытии страницы
-window.onload = function () {
+var fillingAddressHandler = function () {
   fillAddress(mainPinX, mainPinYCenter);
 };
+
+document.addEventListener('DOMContentLoaded', fillingAddressHandler);
 
 var isMapActive = function () {
   return !(map.classList.contains('map--faded'));
@@ -271,8 +285,169 @@ var isMapActive = function () {
 // Вызов функций при событии mouseup
 mainPin.addEventListener('mouseup', function () {
   if (!isMapActive()) {
+    document.removeEventListener('DOMContentLoaded', fillingAddressHandler);
     activatePage();
     renderPins();
     fillAddress(mainPinX, mainPinYPointed);
+    typeOfAccommodation.addEventListener('change', accomodationChangeHandler);
+    checkinSelect.addEventListener('change', checkinChangeHandler);
+    checkoutSelect.addEventListener('change', checkoutChangeHandler);
+    submitButton.addEventListener('click', submitButtonClickHandler);
+    titleInput.addEventListener('keyup', titleInputKeyupHandler);
+    priceInput.addEventListener('keyup', priceInputKeyupHandler);
+    capacitySelect.addEventListener('change', capacitySelectChangeHandler);
+    roomSelect.addEventListener('change', roomSelectChangeHandler);
   }
+});
+
+// ========= ДОВЕРЯЙ НО ПРОВЕРЯЙ ==============
+
+// Зависимость минимального значения поля «Цена за ночь» от типа жилья
+var typeOfAccommodation = adForm.querySelector('#type');
+var priceInput = adForm.querySelector('#price');
+
+var minPrice = {
+  bungalo: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+};
+
+var accomodationChangeHandler = function () {
+  var accomodationMinPrice = minPrice[typeOfAccommodation.value];
+  priceInput.setAttribute('min', accomodationMinPrice);
+  priceInput.setAttribute('placeholder', accomodationMinPrice);
+};
+
+// Синхронизированы поля «Время заезда» и «Время выезда»
+var checkinSelect = adForm.querySelector('#timein');
+var checkoutSelect = adForm.querySelector('#timeout');
+
+var changeTime = function (check, index) {
+  check.selectedIndex = index;
+};
+
+var checkinChangeHandler = function () {
+  changeTime(checkoutSelect, checkinSelect.selectedIndex);
+};
+
+var checkoutChangeHandler = function () {
+  changeTime(checkinSelect, checkoutSelect.selectedIndex);
+};
+
+// Поле «Количество комнат» синхронизировано с полем «Количество мест»
+var roomSelect = adForm.querySelector('#room_number');
+var capacitySelect = adForm.querySelector('#capacity');
+var submitButton = adForm.querySelector('.ad-form__submit');
+
+var guestsNumberByPlace = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0]
+};
+
+var checkRoomCapacity = function () {
+  var roomGuests = guestsNumberByPlace[roomSelect.value];
+  if (roomGuests.indexOf(+capacitySelect.value) === -1) {
+    capacitySelect.setCustomValidity('Количество гостей не соответствует количеству комнат');
+    addError(capacitySelect);
+  } else {
+    capacitySelect.setCustomValidity('');
+    removeError(capacitySelect);
+  }
+};
+
+var addError = function (field) {
+  field.style.borderColor = 'red';
+  field.style.borderWidth = '3px';
+};
+
+var removeError = function (field) {
+  field.style.borderColor = '';
+  field.style.borderWidth = '';
+};
+
+var inputs = adForm.querySelectorAll('input');
+
+var submitButtonClickHandler = function () {
+  checkRoomCapacity();
+  for (var i = 0; i < inputs.length; i++) {
+    var input = inputs[i];
+    if (input.checkValidity() === false) {
+      addError(input);
+    }
+  }
+};
+
+var titleInputKeyupHandler = function () {
+  if (titleInput.validity.valid) {
+    removeError(titleInput);
+  }
+};
+
+var priceInputKeyupHandler = function () {
+  if (priceInput.validity.valid) {
+    removeError(priceInput);
+  }
+};
+
+var capacitySelectChangeHandler = function () {
+  if (capacitySelect.validity.valid) {
+    removeError(capacitySelect);
+  }
+};
+
+var roomSelectChangeHandler = function () {
+  if (roomSelect.validity.valid) {
+    removeError(capacitySelect);
+  }
+};
+
+// Нажатие на кнопку .ad-form__reset сбрасывает страницу в исходное неактивное состояние без перезагрузки
+var formReset = adForm.querySelector('.ad-form__reset');
+
+var removePins = function () {
+  var pinsList = pinList.querySelectorAll('button:not(.map__pin--main)');
+  for (var j = 0; j < pinsList.length; j++) {
+    pinsList[j].remove();
+  }
+};
+
+var removeAds = function () {
+  var adsList = map.querySelectorAll('article.map__card');
+  if (adsList) {
+    for (var k = 0; k < adsList.length; k++) {
+      adsList[k].classList.add('hidden');
+    }
+  }
+};
+
+var resetPage = function () {
+  map.classList.add('map--faded');
+  adForm.classList.add('ad-form--disabled');
+
+  for (var i = 0; i < adFormInput.length; i++) {
+    adFormInput[i].setAttribute('disabled', true);
+  }
+  adForm.reset();
+  removePins();
+  removeAds();
+  fillAddress(mainPinX, mainPinYCenter);
+  removeError(titleInput);
+  removeError(priceInput);
+  removeError(capacitySelect);
+  typeOfAccommodation.removeEventListener('change', accomodationChangeHandler);
+  checkinSelect.removeEventListener('change', checkinChangeHandler);
+  checkoutSelect.removeEventListener('change', checkoutChangeHandler);
+  submitButton.removeEventListener('click', submitButtonClickHandler);
+  titleInput.removeEventListener('keyup', titleInputKeyupHandler);
+  priceInput.removeEventListener('keyup', priceInputKeyupHandler);
+  capacitySelect.removeEventListener('change', capacitySelectChangeHandler);
+  roomSelect.removeEventListener('change', roomSelectChangeHandler);
+};
+
+formReset.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  resetPage();
 });
