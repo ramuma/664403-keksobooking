@@ -423,6 +423,11 @@ var removeAds = function () {
   }
 };
 
+var returnMainPin = function () {
+  mainPin.style.top = map.offsetHeight / 2 + 'px';
+  mainPin.style.left = map.offsetWidth / 2 - MAIN_PIN.WIDTH / 2 + 'px';
+};
+
 var resetPage = function () {
   map.classList.add('map--faded');
   adForm.classList.add('ad-form--disabled');
@@ -433,6 +438,7 @@ var resetPage = function () {
   adForm.reset();
   removePins();
   removeAds();
+  returnMainPin();
   fillAddress(mainPinX, mainPinYCenter);
   removeError(titleInput);
   removeError(priceInput);
@@ -450,4 +456,68 @@ var resetPage = function () {
 formReset.addEventListener('click', function (evt) {
   evt.preventDefault();
   resetPage();
+});
+
+// Перемещение маркера
+var topPinLimit = 130;
+var bottomPinLimit = 630;
+var PIN_DRAG_LIMITS = {
+  x: {
+    min: 0,
+    max: map.clientWidth - MAIN_PIN.WIDTH
+  },
+  y: {
+    min: topPinLimit - MAIN_PIN.HEIGHT,
+    max: bottomPinLimit - MAIN_PIN.HEIGHT
+  }
+};
+
+mainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var mouseMoveHandler = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var left = mainPin.offsetLeft - shift.x;
+    if (left > PIN_DRAG_LIMITS.x.max) {
+      left = PIN_DRAG_LIMITS.x.max;
+    } else if (left <= PIN_DRAG_LIMITS.x.min) {
+      left = PIN_DRAG_LIMITS.x.min;
+    }
+
+    var top = mainPin.offsetTop - shift.y;
+    if (top > PIN_DRAG_LIMITS.y.max) {
+      top = PIN_DRAG_LIMITS.y.max;
+    } else if (top <= PIN_DRAG_LIMITS.y.min) {
+      top = PIN_DRAG_LIMITS.y.min;
+    }
+
+    mainPin.style.top = top + 'px';
+    mainPin.style.left = left + 'px';
+    fillAddress(left, top);
+  };
+
+  var mouseUpHandler = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+  };
+  document.addEventListener('mousemove', mouseMoveHandler);
+  document.addEventListener('mouseup', mouseUpHandler);
 });
