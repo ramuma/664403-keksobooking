@@ -4,13 +4,12 @@ var PIN = {
   WIDTH: 50,
   HEIGHT: 70
 };
-
 var MAIN_PIN = {
   WIDTH: 62,
   HEIGHT: 62,
-  TAIL: 22
+  TAIL: 22,
+  TOTAL_HEIGHT: 84
 };
-
 var TITLES = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -36,26 +35,20 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
-
 var ESC_KEYCODE = 27;
-
 var adsNumber = 8;
-
 var price = {
   min: 1000,
   max: 1000000
 };
-
 var rooms = {
   min: 1,
   max: 5
 };
-
 var guests = {
   min: 1,
   max: 10
 };
-
 var map = document.querySelector('.map');
 var adForm = document.querySelector('.ad-form');
 var adFormInput = adForm.querySelectorAll('.ad-form fieldset');
@@ -423,6 +416,11 @@ var removeAds = function () {
   }
 };
 
+var returnMainPin = function () {
+  mainPin.style.top = map.offsetHeight / 2 + 'px';
+  mainPin.style.left = map.offsetWidth / 2 - MAIN_PIN.WIDTH / 2 + 'px';
+};
+
 var resetPage = function () {
   map.classList.add('map--faded');
   adForm.classList.add('ad-form--disabled');
@@ -433,6 +431,7 @@ var resetPage = function () {
   adForm.reset();
   removePins();
   removeAds();
+  returnMainPin();
   fillAddress(mainPinX, mainPinYCenter);
   removeError(titleInput);
   removeError(priceInput);
@@ -450,4 +449,70 @@ var resetPage = function () {
 formReset.addEventListener('click', function (evt) {
   evt.preventDefault();
   resetPage();
+});
+
+// Перемещение маркера
+var topPinLimit = 130;
+var bottomPinLimit = 630;
+var pinDragLimits = {
+  x: {
+    min: 0,
+    max: map.clientWidth - MAIN_PIN.WIDTH
+  },
+  y: {
+    min: topPinLimit - MAIN_PIN.TOTAL_HEIGHT,
+    max: bottomPinLimit - MAIN_PIN.TOTAL_HEIGHT
+  }
+};
+
+mainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var mouseMoveHandler = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var left = mainPin.offsetLeft - shift.x;
+    if (left > pinDragLimits.x.max) {
+      left = pinDragLimits.x.max;
+    } else if (left <= pinDragLimits.x.min) {
+      left = pinDragLimits.x.min;
+    }
+
+    var top = mainPin.offsetTop - shift.y;
+    if (top > pinDragLimits.y.max) {
+      top = pinDragLimits.y.max;
+    } else if (top <= pinDragLimits.y.min) {
+      top = pinDragLimits.y.min;
+    }
+    var coordX = left + MAIN_PIN.WIDTH / 2;
+    var coordY = top + MAIN_PIN.TOTAL_HEIGHT;
+
+    mainPin.style.top = top + 'px';
+    mainPin.style.left = left + 'px';
+    fillAddress(coordX, coordY);
+  };
+
+  var mouseUpHandler = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', mouseMoveHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+  };
+  document.addEventListener('mousemove', mouseMoveHandler);
+  document.addEventListener('mouseup', mouseUpHandler);
 });
