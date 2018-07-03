@@ -3,7 +3,6 @@
 (function () {
 
   window.data = {
-    adsNumber: 8,
     TITLES: [
       'Большая уютная квартира',
       'Маленькая неуютная квартира',
@@ -29,6 +28,7 @@
       'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
       'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
     ],
+    adsNumber: 8,
     price: {
       min: 1000,
       max: 1000000

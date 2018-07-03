@@ -1,14 +1,14 @@
 'use strict';
 
 (function () {
-  var map = document.querySelector('.map');
-  var mainPin = map.querySelector('.map__pin--main');
   var MAIN_PIN = {
     WIDTH: 62,
     HEIGHT: 62,
     TAIL: 22,
     TOTAL_HEIGHT: 84
   };
+  var map = document.querySelector('.map');
+  var mainPin = map.querySelector('.map__pin--main');
   var pinList = document.querySelector('.map__pins');
   var adForm = document.querySelector('.ad-form');
   var adFormInput = adForm.querySelectorAll('.ad-form fieldset');
@@ -16,6 +16,20 @@
   var mainPinYCenter = Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN.HEIGHT / 2);
   var mainPinYPointed = Math.round(parseInt(mainPin.style.top, 10) + MAIN_PIN.HEIGHT + MAIN_PIN.TAIL);
   var addressInput = document.querySelector('#address');
+  var adTemplate = document.querySelector('template').content.querySelector('.map__card');
+  var filters = map.querySelector('.map__filters-container');
+  var topPinLimit = 130;
+  var bottomPinLimit = 630;
+  var pinDragLimits = {
+    x: {
+      min: 0,
+      max: map.clientWidth - MAIN_PIN.WIDTH
+    },
+    y: {
+      min: topPinLimit - MAIN_PIN.TOTAL_HEIGHT,
+      max: bottomPinLimit - MAIN_PIN.TOTAL_HEIGHT
+    }
+  };
 
   var titleByType = {
     flat: 'Квартира',
@@ -65,9 +79,6 @@
       featuresParent.appendChild(li);
     }
   };
-
-  var adTemplate = document.querySelector('template').content.querySelector('.map__card');
-  var filters = map.querySelector('.map__filters-container');
 
   var renderCard = function (advert) {
     var adElement = adTemplate.cloneNode(true);
@@ -136,19 +147,6 @@
   });
 
   // Перемещение маркера
-  var topPinLimit = 130;
-  var bottomPinLimit = 630;
-  var pinDragLimits = {
-    x: {
-      min: 0,
-      max: map.clientWidth - MAIN_PIN.WIDTH
-    },
-    y: {
-      min: topPinLimit - MAIN_PIN.TOTAL_HEIGHT,
-      max: bottomPinLimit - MAIN_PIN.TOTAL_HEIGHT
-    }
-  };
-
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
@@ -202,9 +200,9 @@
   });
 
   window.map = {
+    MAIN_PIN: MAIN_PIN,
     renderCard: renderCard,
     fillAddress: fillAddress,
-    MAIN_PIN: MAIN_PIN,
     closeCard: closeCard
   };
 })();

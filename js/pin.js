@@ -1,12 +1,11 @@
 'use strict';
 
 (function () {
-  var map = document.querySelector('.map');
   var PIN = {
     WIDTH: 50,
     HEIGHT: 70
   };
-
+  var map = document.querySelector('.map');
   var pinTemplate = document.querySelector('template').content.querySelector('.map__pin');
 
   // Создайте DOM-элементы, соответствующие меткам на карте, и заполните их данными из массива. Итоговую разметку метки .map__pin можно взять из шаблона .map__card

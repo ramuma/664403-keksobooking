@@ -9,8 +9,13 @@
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
   var pinList = document.querySelector('.map__pins');
-
-
+  var checkinSelect = adForm.querySelector('#timein');
+  var checkoutSelect = adForm.querySelector('#timeout');
+  var roomSelect = adForm.querySelector('#room_number');
+  var capacitySelect = adForm.querySelector('#capacity');
+  var submitButton = adForm.querySelector('.ad-form__submit');
+  var inputs = adForm.querySelectorAll('input');
+  var formReset = adForm.querySelector('.ad-form__reset');
   var minPrice = {
     bungalo: 0,
     flat: 1000,
@@ -25,9 +30,6 @@
   };
 
   // Синхронизированы поля «Время заезда» и «Время выезда»
-  var checkinSelect = adForm.querySelector('#timein');
-  var checkoutSelect = adForm.querySelector('#timeout');
-
   var changeTime = function (check, index) {
     check.selectedIndex = index;
   };
@@ -41,10 +43,6 @@
   };
 
   // Поле «Количество комнат» синхронизировано с полем «Количество мест»
-  var roomSelect = adForm.querySelector('#room_number');
-  var capacitySelect = adForm.querySelector('#capacity');
-  var submitButton = adForm.querySelector('.ad-form__submit');
-
   var guestsNumberByPlace = {
     1: [1],
     2: [1, 2],
@@ -72,9 +70,6 @@
     field.style.borderColor = '';
     field.style.borderWidth = '';
   };
-
-  var inputs = adForm.querySelectorAll('input');
-
   var submitButtonClickHandler = function () {
     checkRoomCapacity();
     for (var i = 0; i < inputs.length; i++) {
@@ -110,8 +105,6 @@
   };
 
   // Нажатие на кнопку .ad-form__reset сбрасывает страницу в исходное неактивное состояние без перезагрузки
-  var formReset = adForm.querySelector('.ad-form__reset');
-
   var removePins = function () {
     var pinsList = pinList.querySelectorAll('button:not(.map__pin--main)');
     for (var j = 0; j < pinsList.length; j++) {

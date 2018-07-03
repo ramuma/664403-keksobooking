@@ -42,6 +42,7 @@
     }
     return newArray;
   };
+
   window.utils = {
     escPressHandler: escPressHandler,
     shuffleArray: shuffleArray,
