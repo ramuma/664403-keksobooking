@@ -36,8 +36,6 @@
     pinList.appendChild(fragment);
   };
 
-  // На основе первого по порядку элемента из сгенерированного массива и шаблона .map__card создайте DOM-элемент объявления, заполните его данными из объекта и вставьте полученный DOM-элемент в блок .map перед блоком.map__filters-container
-
   // Добавляем фотографии
 
   var addPhotos = function (photos, photoArray) {

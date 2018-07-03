@@ -48,6 +48,6 @@
     getRandomNumber: getRandomNumber,
     getRandomElement: getRandomElement,
     getRandomLengthArray: getRandomLengthArray,
-    shuffledTitles: shuffleArray(window.data.TITLES)
+    shuffledTitles: shuffleArray(window.data.TITLES),
   };
 })();
