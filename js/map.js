@@ -203,6 +203,9 @@
     MAIN_PIN: MAIN_PIN,
     renderCard: renderCard,
     fillAddress: fillAddress,
-    closeCard: closeCard
+    closeCard: closeCard,
+    mainPinX: mainPinX,
+    mainPinYCenter: mainPinYCenter,
+    mainPinYPointed: mainPinYPointed
   };
 })();

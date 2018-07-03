@@ -159,7 +159,7 @@
     removePins();
     removeAds();
     returnMainPin();
-    window.map.fillAddress(window.data.mainPinX, window.data.mainPinYCenter);
+    window.map.fillAddress(window.map.mainPinX, window.map.mainPinYCenter);
     removeError(titleInput);
     removeError(priceInput);
     removeError(capacitySelect);
