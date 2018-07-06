@@ -38,13 +38,19 @@
     palace: 'Дворец'
   };
 
-  var ads = window.generateAds(window.data.adsNumber);
+  var onSuccess = function (data) {
+    renderPins(data);
+  };
 
-  // Отрисуйте сгенерированные DOM-элементы в блок .map__pins с помощью DocumentFragment
+  var onError = function (errorMessage) {
+    window.utils.addErrorMessage(errorMessage);
+  };
 
-  var renderPins = function () {
+  // var ads = window.generateAds(window.data.adsNumber);
+
+  var renderPins = function (ads) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.adsNumber; i++) {
+    for (var i = 0; i < ads.length; i++) {
       fragment.appendChild(window.pin.createPin(ads[i]));
     }
     pinList.appendChild(fragment);
@@ -106,11 +112,12 @@
 
   var closeCard = function () {
     document.querySelector('.map__card').remove();
-    document.removeEventListener('keydown', window.utils.escPressHandler);
+    document.removeEventListener('keydown', window.utils.cardEscPressHandler);
   };
 
   // Функция для активации страницы
   var activatePage = function () {
+    window.backend.download(onSuccess, onError);
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 

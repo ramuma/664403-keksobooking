@@ -16,6 +16,7 @@
   var submitButton = adForm.querySelector('.ad-form__submit');
   var inputs = adForm.querySelectorAll('input');
   var formReset = adForm.querySelector('.ad-form__reset');
+  var successPopup = document.querySelector('.success');
   var minPrice = {
     bungalo: 0,
     flat: 1000,
@@ -166,12 +167,40 @@
     removeListeners();
   };
 
+  var closePopup = function () {
+    successPopup.classList.add('hidden');
+  };
+
+  var popupEscPressHandler = function (evt) {
+    if (evt.keyCode === window.utils.ESC_KEYCODE) {
+      closePopup();
+    }
+  };
+
+  var onSuccess = function () {
+    resetPage();
+    successPopup.classList.remove('hidden');
+    document.addEventListener('keydown', popupEscPressHandler);
+  };
+
+  var onError = function (errorMessage) {
+    window.utils.addErrorMessage(errorMessage);
+  };
+
+  adForm.addEventListener('submit', function (evt) {
+    window.backend.upload(new FormData(adForm), onSuccess, onError);
+    evt.preventDefault();
+  });
+
+  successPopup.addEventListener('click', closePopup);
+
   formReset.addEventListener('click', function (evt) {
     evt.preventDefault();
     resetPage();
   });
 
   window.form = {
-    addListeners: addListeners
+    addListeners: addListeners,
+    onError: onError
   };
 })();
