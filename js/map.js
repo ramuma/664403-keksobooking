@@ -46,8 +46,6 @@
     window.utils.addErrorMessage(errorMessage);
   };
 
-  // var ads = window.generateAds(window.data.adsNumber);
-
   var renderPins = function (ads) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < ads.length; i++) {
@@ -147,7 +145,6 @@
     if (!isMapActive()) {
       document.removeEventListener('DOMContentLoaded', fillingAddressHandler);
       activatePage();
-      renderPins();
       fillAddress(mainPinX, mainPinYPointed);
       window.form.addListeners();
     }
