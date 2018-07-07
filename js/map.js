@@ -38,11 +38,11 @@
     palace: 'Дворец'
   };
 
-  var onSuccess = function (data) {
+  var successHandler = function (data) {
     renderPins(data);
   };
 
-  var onError = function (errorMessage) {
+  var errorHandler = function (errorMessage) {
     window.utils.addErrorMessage(errorMessage);
   };
 
@@ -115,8 +115,7 @@
 
   // Функция для активации страницы
   var activatePage = function () {
-    // window.backend.download(onSuccess, onError);
-    window.backend.getXhr(onSuccess, onError);
+    window.backend.getXhr(successHandler, errorHandler);
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 

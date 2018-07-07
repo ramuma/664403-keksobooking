@@ -8,23 +8,23 @@
     DOWNLOAD: 'https://js.dump.academy/keksobooking/data'
   };
 
-  var getXhr = function (onSuccess, onError, data) {
+  var getXhr = function (successHandler, errorHandler, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
       if (xhr.status === SUCCESS_STATUS) {
-        onSuccess(xhr.response);
+        successHandler(xhr.response);
       } else {
-        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        errorHandler('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
+      errorHandler('Произошла ошибка соединения');
     });
     xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      errorHandler('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
     xhr.timeout = TIMEOUT;

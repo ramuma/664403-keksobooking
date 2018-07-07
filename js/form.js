@@ -177,18 +177,18 @@
     }
   };
 
-  var onSuccess = function () {
+  var successHandler = function () {
     resetPage();
     successPopup.classList.remove('hidden');
     document.addEventListener('keydown', popupEscPressHandler);
   };
 
-  var onError = function (errorMessage) {
+  var errorHandler = function (errorMessage) {
     window.utils.addErrorMessage(errorMessage);
   };
 
   adForm.addEventListener('submit', function (evt) {
-    window.backend.getXhr(onSuccess, onError, new FormData(adForm));
+    window.backend.getXhr(successHandler, errorHandler, new FormData(adForm));
     evt.preventDefault();
   });
 
@@ -201,6 +201,6 @@
 
   window.form = {
     addListeners: addListeners,
-    onError: onError
+    errorHandler: errorHandler
   };
 })();
