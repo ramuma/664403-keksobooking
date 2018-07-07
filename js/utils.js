@@ -49,8 +49,8 @@
     node.style.color = '#ff5635';
     node.style.backgroundColor = '#ffffff';
     node.style.position = 'absolute';
-    node.style.bottom = 0;
-    node.style.left = '50%';
+    node.style.top = '200px';
+    node.style.left = '40%';
     node.style.fontSize = '30px';
     node.style.padding = '10px';
 

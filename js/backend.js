@@ -1,32 +1,19 @@
 'use strict';
 
 (function () {
-  var upload = function (data, onSuccess, onError) {
-    var URL = 'https://js.dump.academy/keksobooking/';
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-
-    xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
-        onSuccess(xhr.response);
-      } else {
-        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
-      }
-    });
-
-    xhr.open('POST', URL);
-    xhr.send(data);
+  var SUCCESS_STATUS = 200;
+  var TIMEOUT = 10000;
+  var URL = {
+    UPLOAD: 'https://js.dump.academy/keksobooking',
+    DOWNLOAD: 'https://js.dump.academy/keksobooking/data'
   };
 
-  var download = function (onSuccess, onError) {
-    var URL = 'https://js.dump.academy/keksobooking/data';
+  var getXhr = function (onSuccess, onError, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
-    xhr.open('GET', URL);
-
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === SUCCESS_STATUS) {
         onSuccess(xhr.response);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -40,15 +27,18 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 10000; // 10s
+    xhr.timeout = TIMEOUT;
 
-    xhr.open('GET', URL);
-
-    xhr.send();
+    if (data) {
+      xhr.open('POST', URL.UPLOAD);
+      xhr.send(data);
+    } else {
+      xhr.open('GET', URL.DOWNLOAD);
+      xhr.send();
+    }
   };
 
   window.backend = {
-    upload: upload,
-    download: download
+    getXhr: getXhr
   };
 })();
