@@ -21,7 +21,7 @@
         card.remove();
       }
       window.map.renderCard(mapPin);
-      document.addEventListener('keydown', window.utils.escPressHandler);
+      document.addEventListener('keydown', window.utils.cardEscPressHandler);
     };
     pinElement.addEventListener('click', pinElementClickHandler);
 

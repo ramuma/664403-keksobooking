@@ -38,13 +38,17 @@
     palace: 'Дворец'
   };
 
-  var ads = window.generateAds(window.data.adsNumber);
+  var successHandler = function (data) {
+    renderPins(data);
+  };
 
-  // Отрисуйте сгенерированные DOM-элементы в блок .map__pins с помощью DocumentFragment
+  var errorHandler = function (errorMessage) {
+    window.utils.addErrorMessage(errorMessage);
+  };
 
-  var renderPins = function () {
+  var renderPins = function (ads) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.adsNumber; i++) {
+    for (var i = 0; i < ads.length; i++) {
       fragment.appendChild(window.pin.createPin(ads[i]));
     }
     pinList.appendChild(fragment);
@@ -54,12 +58,16 @@
 
   var addPhotos = function (photos, photoArray) {
     var photo = photos.querySelector('.popup__photo');
-    photo.src = photoArray[0];
-    photos.appendChild(photo);
-    for (var i = 1; i < photoArray.length; i++) {
-      var newPhoto = photo.cloneNode(true);
-      newPhoto.src = photoArray[i];
-      photos.appendChild(newPhoto);
+    if (photoArray.length === 0) {
+      photos.classList.add('visually-hidden');
+    } else {
+      photo.src = photoArray[0];
+      photos.appendChild(photo);
+      for (var i = 1; i < photoArray.length; i++) {
+        var newPhoto = photo.cloneNode(true);
+        newPhoto.src = photoArray[i];
+        photos.appendChild(newPhoto);
+      }
     }
   };
 
@@ -70,13 +78,17 @@
   };
 
   var addFeatures = function (featuresParent, featuresArray) {
-    removeChildren(featuresParent);
-    for (var i = 0; i < featuresArray.length; i++) {
-      var li = document.createElement('li');
-      li.classList.add('popup__feature');
-      var classString = 'popup__feature--' + featuresArray[i];
-      li.classList.add(classString);
-      featuresParent.appendChild(li);
+    if (featuresArray.length === 0) {
+      featuresParent.classList.add('visually-hidden');
+    } else {
+      removeChildren(featuresParent);
+      for (var i = 0; i < featuresArray.length; i++) {
+        var li = document.createElement('li');
+        li.classList.add('popup__feature');
+        var classString = 'popup__feature--' + featuresArray[i];
+        li.classList.add(classString);
+        featuresParent.appendChild(li);
+      }
     }
   };
 
@@ -89,10 +101,9 @@
     adElement.querySelector('.popup__text--capacity').textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
     adElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
     addFeatures(adElement.querySelector('.popup__features'), advert.offer.features);
-    adElement.querySelector('.popup__description').textContent = advert.offer.description;
+    adElement.querySelector('.popup__description').innerHTML = advert.offer.description;
     addPhotos(adElement.querySelector('.popup__photos'), advert.offer.photos);
     adElement.querySelector('.popup__avatar').src = advert.author.avatar;
-
     map.insertBefore(adElement, filters);
 
     // Закрываем попап
@@ -106,11 +117,12 @@
 
   var closeCard = function () {
     document.querySelector('.map__card').remove();
-    document.removeEventListener('keydown', window.utils.escPressHandler);
+    document.removeEventListener('keydown', window.utils.cardEscPressHandler);
   };
 
   // Функция для активации страницы
   var activatePage = function () {
+    window.backend.download(successHandler, errorHandler);
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
@@ -140,7 +152,6 @@
     if (!isMapActive()) {
       document.removeEventListener('DOMContentLoaded', fillingAddressHandler);
       activatePage();
-      renderPins();
       fillAddress(mainPinX, mainPinYPointed);
       window.form.addListeners();
     }
