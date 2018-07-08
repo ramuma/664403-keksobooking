@@ -58,12 +58,16 @@
 
   var addPhotos = function (photos, photoArray) {
     var photo = photos.querySelector('.popup__photo');
-    photo.src = photoArray[0];
-    photos.appendChild(photo);
-    for (var i = 1; i < photoArray.length; i++) {
-      var newPhoto = photo.cloneNode(true);
-      newPhoto.src = photoArray[i];
-      photos.appendChild(newPhoto);
+    if (photoArray.length === 0) {
+      photos.classList.add('visually-hidden');
+    } else {
+      photo.src = photoArray[0];
+      photos.appendChild(photo);
+      for (var i = 1; i < photoArray.length; i++) {
+        var newPhoto = photo.cloneNode(true);
+        newPhoto.src = photoArray[i];
+        photos.appendChild(newPhoto);
+      }
     }
   };
 
@@ -74,13 +78,17 @@
   };
 
   var addFeatures = function (featuresParent, featuresArray) {
-    removeChildren(featuresParent);
-    for (var i = 0; i < featuresArray.length; i++) {
-      var li = document.createElement('li');
-      li.classList.add('popup__feature');
-      var classString = 'popup__feature--' + featuresArray[i];
-      li.classList.add(classString);
-      featuresParent.appendChild(li);
+    if (featuresArray.length === 0) {
+      featuresParent.classList.add('visually-hidden');
+    } else {
+      removeChildren(featuresParent);
+      for (var i = 0; i < featuresArray.length; i++) {
+        var li = document.createElement('li');
+        li.classList.add('popup__feature');
+        var classString = 'popup__feature--' + featuresArray[i];
+        li.classList.add(classString);
+        featuresParent.appendChild(li);
+      }
     }
   };
 
@@ -93,10 +101,9 @@
     adElement.querySelector('.popup__text--capacity').textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
     adElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
     addFeatures(adElement.querySelector('.popup__features'), advert.offer.features);
-    adElement.querySelector('.popup__description').textContent = advert.offer.description;
+    adElement.querySelector('.popup__description').innerHTML = advert.offer.description;
     addPhotos(adElement.querySelector('.popup__photos'), advert.offer.photos);
     adElement.querySelector('.popup__avatar').src = advert.author.avatar;
-
     map.insertBefore(adElement, filters);
 
     // Закрываем попап
