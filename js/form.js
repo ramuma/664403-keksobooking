@@ -188,7 +188,7 @@
   };
 
   adForm.addEventListener('submit', function (evt) {
-    window.backend.getXhr(successHandler, errorHandler, new FormData(adForm));
+    window.backend.upload(successHandler, errorHandler, new FormData(adForm));
     evt.preventDefault();
   });
 
@@ -201,6 +201,6 @@
 
   window.form = {
     addListeners: addListeners,
-    errorHandler: errorHandler
+    errorHandler: errorHandler,
   };
 })();

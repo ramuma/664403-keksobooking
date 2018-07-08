@@ -48,14 +48,14 @@
     node.style.zIndex = '100';
     node.style.color = '#ff5635';
     node.style.backgroundColor = '#ffffff';
-    node.style.position = 'absolute';
-    node.style.top = '200px';
+    node.style.position = 'fixed';
+    node.style.top = '50%';
     node.style.left = '40%';
     node.style.fontSize = '30px';
     node.style.padding = '10px';
 
     node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
+    document.body.insertAdjacentElement('beforeend', node);
 
     setTimeout(function () {
       document.body.removeChild(node);

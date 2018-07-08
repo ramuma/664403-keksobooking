@@ -122,7 +122,7 @@
 
   // Функция для активации страницы
   var activatePage = function () {
-    window.backend.getXhr(successHandler, errorHandler);
+    window.backend.download(successHandler, errorHandler);
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 

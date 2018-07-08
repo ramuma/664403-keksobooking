@@ -8,7 +8,7 @@
     DOWNLOAD: 'https://js.dump.academy/keksobooking/data'
   };
 
-  var getXhr = function (successHandler, errorHandler, data) {
+  var getXhr = function (method, url, successHandler, errorHandler) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -29,16 +29,18 @@
 
     xhr.timeout = TIMEOUT;
 
-    if (data) {
-      xhr.open('POST', URL.UPLOAD);
-      xhr.send(data);
-    } else {
-      xhr.open('GET', URL.DOWNLOAD);
-      xhr.send();
-    }
+    xhr.open(method, url);
+    return xhr;
+  };
+  var download = function (successHandler, errorHandler) {
+    getXhr('GET', URL.DOWNLOAD, successHandler, errorHandler).send();
+  };
+  var upload = function (successHandler, errorHandler, data) {
+    getXhr('POST', URL.UPLOAD, successHandler, errorHandler).send(data);
   };
 
   window.backend = {
-    getXhr: getXhr
+    upload: upload,
+    download: download
   };
 })();
