@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var PINS_NUMBER = 5;
   var MAIN_PIN = {
     WIDTH: 62,
     HEIGHT: 62,
@@ -39,7 +40,9 @@
   };
 
   var successHandler = function (data) {
-    renderPins(data);
+    window.adverts = data;
+    var slicedAdverts = window.adverts.slice(0, PINS_NUMBER);
+    renderPins(slicedAdverts);
   };
 
   var errorHandler = function (errorMessage) {
@@ -213,6 +216,7 @@
   window.map = {
     MAIN_PIN: MAIN_PIN,
     renderCard: renderCard,
+    renderPins: renderPins,
     fillAddress: fillAddress,
     closeCard: closeCard,
     mainPinX: mainPinX,

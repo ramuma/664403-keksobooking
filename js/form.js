@@ -165,6 +165,7 @@
     removeError(priceInput);
     removeError(capacitySelect);
     removeListeners();
+    window.filter.clearFilter();
   };
 
   var closePopup = function () {
@@ -202,5 +203,7 @@
   window.form = {
     addListeners: addListeners,
     errorHandler: errorHandler,
+    removePins: removePins,
+    removeAds: removeAds
   };
 })();
