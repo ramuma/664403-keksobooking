@@ -21,6 +21,7 @@
   var filters = map.querySelector('.map__filters-container');
   var topPinLimit = 130;
   var bottomPinLimit = 630;
+  var activeCard;
   var pinDragLimits = {
     x: {
       min: 0,
@@ -108,6 +109,7 @@
     addPhotos(adElement.querySelector('.popup__photos'), advert.offer.photos);
     adElement.querySelector('.popup__avatar').src = advert.author.avatar;
     map.insertBefore(adElement, filters);
+    activeCard = adElement;
 
     // Закрываем попап
     var closeButton = adElement.querySelector('.popup__close');
@@ -119,9 +121,12 @@
   };
 
   var closeCard = function () {
-    document.querySelector('.map__card').remove();
-    window.pin.deactivatePin();
-    document.removeEventListener('keydown', window.utils.cardEscPressHandler);
+    if (activeCard) {
+      map.removeChild(activeCard);
+      document.removeEventListener('keydown', window.utils.cardEscPressHandler);
+      window.pin.deactivatePin();
+      activeCard = null;
+    }
   };
 
   // Функция для активации страницы
