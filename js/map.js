@@ -21,11 +21,6 @@
   var filters = map.querySelector('.map__filters-container');
   var topPinLimit = 130;
   var bottomPinLimit = 630;
-  var typeSelect = filters.querySelector('#housing-type');
-  var priceSelect = filters.querySelector('#housing-price');
-  var roomsSelect = filters.querySelector('#housing-rooms');
-  var guestsSelect = filters.querySelector('#housing-guests');
-  var featuresFieldset = filters.querySelector('#housing-features');
   var pinDragLimits = {
     x: {
       min: 0,
@@ -49,17 +44,6 @@
     var slicedAdverts = window.adverts.slice(0, PINS_NUMBER);
     renderPins(slicedAdverts);
   };
-
-  var filterChangeHandler = window.debounce(function () {
-    window.filterAds();
-  });
-
-  typeSelect.addEventListener('change', filterChangeHandler);
-  priceSelect.addEventListener('change', filterChangeHandler);
-  roomsSelect.addEventListener('change', filterChangeHandler);
-  guestsSelect.addEventListener('change', filterChangeHandler);
-  featuresFieldset.addEventListener('change', filterChangeHandler, true);
-
 
   var errorHandler = function (errorMessage) {
     window.utils.addErrorMessage(errorMessage);
@@ -136,6 +120,7 @@
 
   var closeCard = function () {
     document.querySelector('.map__card').remove();
+    window.pin.deactivatePin();
     document.removeEventListener('keydown', window.utils.cardEscPressHandler);
   };
 
