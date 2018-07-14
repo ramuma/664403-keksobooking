@@ -16,8 +16,8 @@
     high: 50000
   };
 
-  var filterAds = function (it, item, key) {
-    return it.value === 'any' ? true : it.value === item[key].toString();
+  var filterAds = function (field, item, key) {
+    return field.value === 'any' ? true : field.value === item[key].toString();
   };
 
   var checkType = function (item) {
@@ -61,16 +61,16 @@
   });
 
   var activateFilter = function () {
-    filterFields.forEach(function (it) {
-      it.disabled = false;
+    filterFields.forEach(function (field) {
+      field.disabled = false;
     });
     filterChangeHandler();
     filters.addEventListener('change', filterChangeHandler);
   };
 
   var clearFilter = function () {
-    filterFields.forEach(function (it) {
-      it.value = 'any';
+    filterFields.forEach(function (field) {
+      field.value = 'any';
     });
     var featuresItems = featuresFieldset.querySelectorAll('input');
     featuresItems.forEach(function (feature) {
@@ -79,8 +79,8 @@
   };
 
   var deactivateFilter = function () {
-    filterFields.forEach(function (it) {
-      it.disabled = true;
+    filterFields.forEach(function (field) {
+      field.disabled = true;
     });
     clearFilter();
     filters.removeEventListener('change', filterChangeHandler);
