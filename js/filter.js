@@ -86,20 +86,15 @@
     filters.removeEventListener('change', filterChangeHandler);
   };
 
-  var activateFiltration = function (data) {
+  var launchFiltration = function (data) {
     ads = data.slice(0);
     activateFilter();
     return data.slice(0, PINS_NUMBER);
   };
 
-  var deactivateFiltration = function () {
-    deactivateFilter();
-  };
-
   window.filter = {
-    clearFilter: clearFilter,
-    activateFiltration: activateFiltration,
-    deactivateFiltration: deactivateFiltration
+    launchFiltration: launchFiltration,
+    deactivateFilter: deactivateFilter
   };
 
 })();

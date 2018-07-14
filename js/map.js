@@ -18,8 +18,6 @@
   var addressInput = document.querySelector('#address');
   var adTemplate = document.querySelector('template').content.querySelector('.map__card');
   var filters = map.querySelector('.map__filters-container');
-  var filtersSelects = document.querySelectorAll('.map__filter');
-  var filtersFieldset = document.querySelector('#housing-features');
   var topPinLimit = 130;
   var bottomPinLimit = 630;
   var activeCard;
@@ -41,22 +39,8 @@
     palace: 'Дворец'
   };
 
-  var activateFilter = function () {
-    filtersSelects.forEach(function (it) {
-      it.disabled = false;
-    });
-    filtersFieldset.disabled = false;
-  };
-
-  var deactivateFilter = function () {
-    filtersSelects.forEach(function (it) {
-      it.disabled = true;
-    });
-    filtersFieldset.disabled = true;
-  };
-
   var successHandler = function (data) {
-    window.filter.activateFiltration(data);
+    window.filter.launchFiltration(data);
   };
 
   var errorHandler = function (errorMessage) {
@@ -146,7 +130,6 @@
   var activatePage = function () {
     window.backend.download(successHandler, errorHandler);
     map.classList.remove('map--faded');
-    activateFilter();
     adForm.classList.remove('ad-form--disabled');
 
     for (var i = 0; i < adFormInput.length; i++) {
@@ -241,7 +224,6 @@
     closeCard: closeCard,
     mainPinX: mainPinX,
     mainPinYCenter: mainPinYCenter,
-    mainPinYPointed: mainPinYPointed,
-    deactivateFilter: deactivateFilter
+    mainPinYPointed: mainPinYPointed
   };
 })();

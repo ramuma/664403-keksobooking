@@ -149,16 +149,6 @@
     roomSelect.removeEventListener('change', roomSelectChangeHandler);
   };
 
-  /* var clearFilter = function () {
-    filterItems.forEach(function (item) {
-      item.value = 'any';
-    });
-    var featuresItems = featuresFieldset.querySelectorAll('input');
-    featuresItems.forEach(function (feature) {
-      feature.checked = false;
-    });
-  }; */
-
   var resetPage = function () {
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
@@ -175,8 +165,7 @@
     removeError(priceInput);
     removeError(capacitySelect);
     removeListeners();
-    window.filter.clearFilter();
-    window.map.deactivateFilter();
+    window.filter.deactivateFilter();
   };
 
   var closePopup = function () {
