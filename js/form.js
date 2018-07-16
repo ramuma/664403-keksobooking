@@ -179,7 +179,6 @@
     removeError(capacitySelect);
     removeListeners();
     clearFilter();
-    // window.filter.deactivateFilter();
   };
 
   var closePopup = function () {
