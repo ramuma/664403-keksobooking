@@ -61,9 +61,6 @@
   });
 
   var activateFilter = function () {
-    filterFields.forEach(function (field) {
-      field.disabled = false;
-    });
     filterChangeHandler();
     filters.addEventListener('change', filterChangeHandler);
   };
