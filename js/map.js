@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var PINS_NUMBER = 5;
   var MAIN_PIN = {
     WIDTH: 62,
     HEIGHT: 62,
@@ -21,6 +22,7 @@
   var topPinLimit = 130;
   var bottomPinLimit = 630;
   var activeCard;
+  var pins = [];
   var pinDragLimits = {
     x: {
       min: 0,
@@ -39,8 +41,17 @@
     palace: 'Дворец'
   };
 
+  var filterChangeHandler = window.debounce(function () {
+    window.form.removePins();
+    window.form.removeAds();
+    var sortedAds = pins.filter(window.filter.sortAds);
+    renderPins(sortedAds.slice(0, PINS_NUMBER));
+  });
+
   var successHandler = function (data) {
-    window.filter.launchFiltration(data);
+    pins = data;
+    renderPins(data.slice(0, PINS_NUMBER));
+    filters.addEventListener('change', filterChangeHandler);
   };
 
   var errorHandler = function (errorMessage) {

@@ -17,6 +17,9 @@
   var inputs = adForm.querySelectorAll('input');
   var formReset = adForm.querySelector('.ad-form__reset');
   var successPopup = document.querySelector('.success');
+  var filters = document.querySelector('.map__filters');
+  var filterFields = filters.querySelectorAll('select, input');
+  var featuresFieldset = filters.querySelector('#housing-features');
   var minPrice = {
     bungalo: 0,
     flat: 1000,
@@ -127,6 +130,16 @@
     mainPin.style.left = map.offsetWidth / 2 - window.map.MAIN_PIN.WIDTH / 2 + 'px';
   };
 
+  var clearFilter = function () {
+    filterFields.forEach(function (field) {
+      field.value = 'any';
+    });
+    var featuresItems = featuresFieldset.querySelectorAll('input');
+    featuresItems.forEach(function (feature) {
+      feature.checked = false;
+    });
+  };
+
   var addListeners = function () {
     typeOfAccommodation.addEventListener('change', accomodationChangeHandler);
     checkinSelect.addEventListener('change', checkinChangeHandler);
@@ -165,7 +178,8 @@
     removeError(priceInput);
     removeError(capacitySelect);
     removeListeners();
-    window.filter.deactivateFilter();
+    clearFilter();
+    // window.filter.deactivateFilter();
   };
 
   var closePopup = function () {
