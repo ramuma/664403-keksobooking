@@ -48,15 +48,15 @@
       return item.offer.features.includes(element.value);
     });
   };
-  var sortAds = function () {
-    sortedAds = window.map.pins.filter(function (item) {
-      return checkType(item) && checkPrice(item) && checkRooms(item) && checkGuests(item) && checkFeatures(item);
-    });
-  };
+  // var sortAds = function () {
+  sortedAds = window.map.pins.filter(function (item) {
+    return checkType(item) && checkPrice(item) && checkRooms(item) && checkGuests(item) && checkFeatures(item);
+  });
+  // };
 
   window.filter = {
     sortedAds: sortedAds,
-    sortAds: sortAds
+    // sortAds: sortAds
   };
 
 })();

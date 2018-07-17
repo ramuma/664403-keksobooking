@@ -45,7 +45,7 @@
   var filterChangeHandler = window.debounce(function () {
     window.form.removePins();
     window.form.removeAds();
-    window.filter.sortAds();
+    // window.filter.sortAds();
     // var sortedAds = pins.filter(window.filter.sortAds);
     renderPins(window.filter.sortedAds.slice(0, PINS_NUMBER));
   });
@@ -240,6 +240,7 @@
     closeCard: closeCard,
     mainPinX: mainPinX,
     mainPinYCenter: mainPinYCenter,
-    mainPinYPointed: mainPinYPointed
+    mainPinYPointed: mainPinYPointed,
+    pins: pins
   };
 })();
