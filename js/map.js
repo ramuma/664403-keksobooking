@@ -46,7 +46,6 @@
     window.form.removePins();
     window.form.removeAds();
     // window.filter.sortAds();
-    // var sortedAds = pins.filter(window.filter.sortAds);
     renderPins(window.filter.sortedAds.slice(0, PINS_NUMBER));
   });
 
