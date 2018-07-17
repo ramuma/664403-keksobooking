@@ -19,6 +19,7 @@
   var addressInput = document.querySelector('#address');
   var adTemplate = document.querySelector('template').content.querySelector('.map__card');
   var filters = map.querySelector('.map__filters-container');
+  var filterFields = filters.querySelectorAll('select, input');
   var topPinLimit = 130;
   var bottomPinLimit = 630;
   var activeCard;
@@ -51,6 +52,9 @@
   var successHandler = function (data) {
     pins = data;
     renderPins(data.slice(0, PINS_NUMBER));
+    filterFields.forEach(function (field) {
+      field.disabled = false;
+    });
     filters.addEventListener('change', filterChangeHandler);
   };
 

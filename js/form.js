@@ -169,6 +169,9 @@
     for (var i = 0; i < adFormInput.length; i++) {
       adFormInput[i].setAttribute('disabled', true);
     }
+    filterFields.forEach(function (field) {
+      field.disabled = true;
+    });
     adForm.reset();
     removePins();
     removeAds();
