@@ -23,7 +23,6 @@
   var topPinLimit = 130;
   var bottomPinLimit = 630;
   var activeCard;
-  var pins = [];
   var pinDragLimits = {
     x: {
       min: 0,
@@ -45,17 +44,26 @@
   var filterChangeHandler = window.debounce(function () {
     window.form.removePins();
     window.form.removeAds();
-    // window.filter.sortAds();
+    window.filter.sortAds();
     renderPins(window.filter.sortedAds.slice(0, PINS_NUMBER));
   });
 
-  var successHandler = function (data) {
-    pins = data;
-    renderPins(data.slice(0, PINS_NUMBER));
+  var activateFilter = function () {
     filterFields.forEach(function (field) {
       field.disabled = false;
     });
+    filterChangeHandler();
     filters.addEventListener('change', filterChangeHandler);
+  };
+
+  var activateFiltration = function (adData) {
+    window.filter.sortedAds = adData.slice(0);
+    activateFilter();
+    return adData.slice(0, PINS_NUMBER);
+  };
+
+  var successHandler = function (data) {
+    activateFiltration(data);
   };
 
   var errorHandler = function (errorMessage) {
@@ -146,6 +154,7 @@
     window.backend.download(successHandler, errorHandler);
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
+    // window.filter.sortAds();
 
     for (var i = 0; i < adFormInput.length; i++) {
       adFormInput[i].removeAttribute('disabled', '');
@@ -239,7 +248,6 @@
     closeCard: closeCard,
     mainPinX: mainPinX,
     mainPinYCenter: mainPinYCenter,
-    mainPinYPointed: mainPinYPointed,
-    pins: pins
+    mainPinYPointed: mainPinYPointed
   };
 })();
