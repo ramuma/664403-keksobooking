@@ -45,8 +45,9 @@
   var filterChangeHandler = window.debounce(function () {
     window.form.removePins();
     window.form.removeAds();
-    var sortedAds = pins.filter(window.filter.sortAds);
-    renderPins(sortedAds.slice(0, PINS_NUMBER));
+    window.filter.sortAds();
+    // var sortedAds = pins.filter(window.filter.sortAds);
+    renderPins(window.filter.sortedAds.slice(0, PINS_NUMBER));
   });
 
   var successHandler = function (data) {
