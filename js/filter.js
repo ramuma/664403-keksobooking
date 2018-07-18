@@ -53,7 +53,7 @@
     return checkType(item) && checkPrice(item) && checkRooms(item) && checkGuests(item) && checkFeatures(item);
   }; */
   var sortAds = function (adData) {
-    adData.filter(function (item) {
+    return adData.filter(function (item) {
       return checkType(item) && checkPrice(item) && checkRooms(item) && checkGuests(item) && checkFeatures(item);
     });
   };
