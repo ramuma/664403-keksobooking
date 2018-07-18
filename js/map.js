@@ -44,7 +44,9 @@
   var filterChangeHandler = window.debounce(function () {
     window.form.removePins();
     window.form.removeAds();
+    window.filter.sortAds(window.filter.sortedAds);
     renderPins(window.filter.sortedAds.slice(0, PINS_NUMBER));
+    console.log(window.filter.sortedAds);
   });
 
   var successHandler = function (data) {
@@ -53,7 +55,8 @@
       field.disabled = false;
     });
     filters.addEventListener('change', filterChangeHandler);
-    window.filter.sortAds(data);
+    // window.filter.sortAds(data);
+    window.filter.sortedAds = data;
   };
 
   var errorHandler = function (errorMessage) {
