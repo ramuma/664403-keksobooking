@@ -1,16 +1,16 @@
 'use strict';
 
 (function () {
+  var PriceLimits = {
+    LOW: 10000,
+    HIGH: 50000
+  };
   var filters = document.querySelector('.map__filters');
   var typeSelect = filters.querySelector('#housing-type');
   var priceSelect = filters.querySelector('#housing-price');
   var roomsSelect = filters.querySelector('#housing-rooms');
   var guestsSelect = filters.querySelector('#housing-guests');
   var featuresFieldset = filters.querySelector('#housing-features');
-  var priceLimits = {
-    low: 10000,
-    high: 50000
-  };
   var sortedAds;
 
   var filterAds = function (field, item, key) {
@@ -24,11 +24,11 @@
   var checkPrice = function (item) {
     switch (priceSelect.value) {
       case 'low':
-        return item.offer.price < priceLimits.low;
+        return item.offer.price < PriceLimits.LOW;
       case 'middle':
-        return item.offer.price >= priceLimits.low && item.offer.price <= priceLimits.high;
+        return item.offer.price >= PriceLimits.LOW && item.offer.price <= PriceLimits.HIGH;
       case 'high':
-        return item.offer.price > priceLimits.high;
+        return item.offer.price > PriceLimits.HIGH;
       default:
         return true;
     }

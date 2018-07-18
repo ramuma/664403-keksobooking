@@ -20,7 +20,7 @@
   var filters = document.querySelector('.map__filters');
   var filterFields = filters.querySelectorAll('select, input');
   var featuresFieldset = filters.querySelector('#housing-features');
-  var minPrice = {
+  var MinPrice = {
     bungalo: 0,
     flat: 1000,
     house: 5000,
@@ -28,7 +28,7 @@
   };
 
   var accomodationChangeHandler = function () {
-    var accomodationMinPrice = minPrice[typeOfAccommodation.value];
+    var accomodationMinPrice = MinPrice[typeOfAccommodation.value];
     priceInput.setAttribute('min', accomodationMinPrice);
     priceInput.setAttribute('placeholder', accomodationMinPrice);
   };
@@ -47,7 +47,7 @@
   };
 
   // Поле «Количество комнат» синхронизировано с полем «Количество мест»
-  var guestsNumberByPlace = {
+  var GuestsNumberByPlace = {
     1: [1],
     2: [1, 2],
     3: [1, 2, 3],
@@ -55,7 +55,7 @@
   };
 
   var checkRoomCapacity = function () {
-    var roomGuests = guestsNumberByPlace[roomSelect.value];
+    var roomGuests = GuestsNumberByPlace[roomSelect.value];
     if (roomGuests.indexOf(+capacitySelect.value) === -1) {
       capacitySelect.setCustomValidity('Количество гостей не соответствует количеству комнат');
       addError(capacitySelect);
@@ -111,23 +111,23 @@
   // Нажатие на кнопку .ad-form__reset сбрасывает страницу в исходное неактивное состояние без перезагрузки
   var removePins = function () {
     var pinsList = pinList.querySelectorAll('button:not(.map__pin--main)');
-    for (var j = 0; j < pinsList.length; j++) {
-      pinsList[j].remove();
-    }
+    pinsList.forEach(function (it) {
+      it.remove();
+    });
   };
 
   var removeAds = function () {
     var adsList = map.querySelectorAll('article.map__card');
     if (adsList) {
-      for (var k = 0; k < adsList.length; k++) {
-        adsList[k].classList.add('hidden');
-      }
+      adsList.forEach(function (it) {
+        it.classList.add('hidden');
+      });
     }
   };
 
   var returnMainPin = function () {
     mainPin.style.top = map.offsetHeight / 2 + 'px';
-    mainPin.style.left = map.offsetWidth / 2 - window.map.MAIN_PIN.WIDTH / 2 + 'px';
+    mainPin.style.left = map.offsetWidth / 2 - window.map.MainPin.WIDTH / 2 + 'px';
   };
 
   var clearFilter = function () {
@@ -160,15 +160,15 @@
     priceInput.removeEventListener('keyup', priceInputKeyupHandler);
     capacitySelect.removeEventListener('change', capacitySelectChangeHandler);
     roomSelect.removeEventListener('change', roomSelectChangeHandler);
+    filters.removeEventListener('change', window.map.filterChangeHandler);
   };
 
   var resetPage = function () {
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
-
-    for (var i = 0; i < adFormInput.length; i++) {
-      adFormInput[i].setAttribute('disabled', true);
-    }
+    adFormInput.forEach(function (it) {
+      it.setAttribute('disabled', true);
+    });
     filterFields.forEach(function (field) {
       field.disabled = true;
     });

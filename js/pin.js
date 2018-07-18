@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var PIN = {
+  var Pin = {
     WIDTH: 50,
     HEIGHT: 70
   };
@@ -25,8 +25,8 @@
   // Создайте DOM-элементы, соответствующие меткам на карте, и заполните их данными из массива
   var createPin = function (mapPin) {
     var pinElement = pinTemplate.cloneNode(true);
-    pinElement.style.left = mapPin.location.x - PIN.WIDTH / 2 + 'px';
-    pinElement.style.top = mapPin.location.y - PIN.HEIGHT + 'px';
+    pinElement.style.left = mapPin.location.x - Pin.WIDTH / 2 + 'px';
+    pinElement.style.top = mapPin.location.y - Pin.HEIGHT + 'px';
     pinElement.querySelector('img').src = mapPin.author.avatar;
     pinElement.querySelector('img').alt = mapPin.offer.title;
     var pinElementClickHandler = function () {
