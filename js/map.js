@@ -23,6 +23,7 @@
   var topPinLimit = 130;
   var bottomPinLimit = 630;
   var activeCard;
+  var sortedAds;
   var pinDragLimits = {
     x: {
       min: 0,
@@ -44,26 +45,16 @@
   var filterChangeHandler = window.debounce(function () {
     window.form.removePins();
     window.form.removeAds();
-    window.filter.sortAds();
-    renderPins(window.filter.sortedAds.slice(0, PINS_NUMBER));
+    renderPins(sortedAds.slice(0, PINS_NUMBER));
   });
 
-  var activateFilter = function () {
+  var successHandler = function (data) {
+    sortedAds = window.filter.sortAds(data);
+    renderPins(data.slice(0, PINS_NUMBER));
     filterFields.forEach(function (field) {
       field.disabled = false;
     });
-    filterChangeHandler();
     filters.addEventListener('change', filterChangeHandler);
-  };
-
-  var activateFiltration = function (adData) {
-    window.filter.sortedAds = adData.slice(0);
-    activateFilter();
-    return adData.slice(0, PINS_NUMBER);
-  };
-
-  var successHandler = function (data) {
-    activateFiltration(data);
   };
 
   var errorHandler = function (errorMessage) {
