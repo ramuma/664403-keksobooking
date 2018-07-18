@@ -11,6 +11,7 @@
     low: 10000,
     high: 50000
   };
+  var sortedAds;
 
   var filterAds = function (field, item, key) {
     return field.value === 'any' ? true : field.value === item[key].toString();
@@ -52,13 +53,13 @@
     return checkType(item) && checkPrice(item) && checkRooms(item) && checkGuests(item) && checkFeatures(item);
   }; */
   var sortAds = function (adData) {
-    adData.filter(function (item) {
+    sortedAds = adData.filter(function (item) {
       return checkType(item) && checkPrice(item) && checkRooms(item) && checkGuests(item) && checkFeatures(item);
     });
   };
 
   window.filter = {
-    // sortedAds: sortedAds,
+    sortedAds: sortedAds,
     sortAds: sortAds
   };
 
