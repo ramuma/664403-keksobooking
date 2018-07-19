@@ -9,6 +9,7 @@
   var checkoutSelect = window.utils.adForm.querySelector('#timeout');
   var roomSelect = window.utils.adForm.querySelector('#room_number');
   var capacitySelect = window.utils.adForm.querySelector('#capacity');
+  var capacityOptions = capacitySelect.querySelectorAll('option');
   var submitButton = window.utils.adForm.querySelector('.ad-form__submit');
   var inputs = window.utils.adForm.querySelectorAll('input');
   var formReset = window.utils.adForm.querySelector('.ad-form__reset');
@@ -42,22 +43,18 @@
   };
 
   // Поле «Количество комнат» синхронизировано с полем «Количество мест»
-  var GuestsNumberByPlace = {
-    1: [1],
-    2: [1, 2],
-    3: [1, 2, 3],
-    100: [0]
+  var guestsNumberByPlace = {
+    1: ['1'],
+    2: ['1', '2'],
+    3: ['1', '2', '3'],
+    100: ['0']
   };
 
-  var checkRoomCapacity = function () {
-    var roomGuests = GuestsNumberByPlace[roomSelect.value];
-    if (roomGuests.indexOf(+capacitySelect.value) === -1) {
-      capacitySelect.setCustomValidity('Количество гостей не соответствует количеству комнат');
-      addError(capacitySelect);
-    } else {
-      capacitySelect.setCustomValidity('');
-      removeError(capacitySelect);
-    }
+  var roomsOptionChangeHandler = function () {
+    capacityOptions.forEach(function (element) {
+      element.disabled = !guestsNumberByPlace[roomSelect.value].includes(element.value);
+    });
+    capacitySelect.value = guestsNumberByPlace[roomSelect.value].includes(capacitySelect.value) ? capacitySelect.value : guestsNumberByPlace[roomSelect.value][0];
   };
 
   var addError = function (field) {
@@ -71,7 +68,6 @@
   };
 
   var submitButtonClickHandler = function () {
-    checkRoomCapacity();
     inputs.forEach(function (it) {
       var input = it;
       checkFieldValidity(input);
@@ -92,16 +88,6 @@
 
   var priceInputKeyupHandler = function () {
     checkFieldValidity(priceInput);
-  };
-
-  var capacitySelectChangeHandler = function () {
-    checkFieldValidity(capacitySelect);
-  };
-
-  var roomSelectChangeHandler = function () {
-    if (roomSelect.validity.valid) {
-      removeError(capacitySelect);
-    }
   };
 
   // Нажатие на кнопку .ad-form__reset сбрасывает страницу в исходное неактивное состояние без перезагрузки
@@ -140,8 +126,7 @@
     submitButton.addEventListener('click', submitButtonClickHandler);
     titleInput.addEventListener('keyup', titleInputKeyupHandler);
     priceInput.addEventListener('keyup', priceInputKeyupHandler);
-    capacitySelect.addEventListener('change', capacitySelectChangeHandler);
-    roomSelect.addEventListener('change', roomSelectChangeHandler);
+    roomSelect.addEventListener('change', roomsOptionChangeHandler);
   };
 
   var removeListeners = function () {
@@ -151,8 +136,7 @@
     submitButton.removeEventListener('click', submitButtonClickHandler);
     titleInput.removeEventListener('keyup', titleInputKeyupHandler);
     priceInput.removeEventListener('keyup', priceInputKeyupHandler);
-    capacitySelect.removeEventListener('change', capacitySelectChangeHandler);
-    roomSelect.removeEventListener('change', roomSelectChangeHandler);
+    roomSelect.removeEventListener('change', roomsOptionChangeHandler);
     window.utils.filters.removeEventListener('change', window.map.filterChangeHandler);
   };
 
@@ -175,6 +159,7 @@
     removeError(capacitySelect);
     removeListeners();
     clearFilter();
+    roomsOptionChangeHandler();
   };
 
   var closePopup = function () {
@@ -213,6 +198,7 @@
     addListeners: addListeners,
     errorHandler: errorHandler,
     removePins: removePins,
-    removeAd: removeAd
+    removeAd: removeAd,
+    roomsOptionChangeHandler: roomsOptionChangeHandler
   };
 })();

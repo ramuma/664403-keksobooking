@@ -49,6 +49,7 @@
     });
     window.utils.filters.addEventListener('change', filterChangeHandler);
     window.filter.sortedAds = data;
+    window.form.roomsOptionChangeHandler();
   };
 
   var errorHandler = function (errorMessage) {
