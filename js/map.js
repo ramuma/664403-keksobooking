@@ -110,10 +110,14 @@
     adElement.querySelector('.popup__avatar').src = advert.author.avatar;
     window.utils.map.insertBefore(adElement, filtersContainer);
     activeCard = adElement;
-    var closeButtonClickHandler = function () {
-      closeCard();
-    };
     var closeButton = adElement.querySelector('.popup__close');
+    var closeAdElement = function () {
+      closeCard();
+      closeButton.removeEventListener('click', closeButtonClickHandler);
+    };
+    var closeButtonClickHandler = function () {
+      closeAdElement();
+    };
     closeButton.addEventListener('click', closeButtonClickHandler);
     return adElement;
   };
@@ -122,7 +126,6 @@
     if (activeCard) {
       window.utils.map.removeChild(activeCard);
       document.removeEventListener('keydown', window.utils.cardEscPressHandler);
-      // closeButton.removeEventListener('click', closeButtonClickHandler);
       window.pin.deactivatePin();
       activeCard = null;
     }
