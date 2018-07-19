@@ -156,10 +156,10 @@
     window.map.fillAddress(window.map.mainPinX, window.map.mainPinYCenter);
     removeError(titleInput);
     removeError(priceInput);
-    removeError(capacitySelect);
     removeListeners();
     clearFilter();
     roomsOptionChangeHandler();
+    accomodationChangeHandler();
   };
 
   var closePopup = function () {
@@ -199,6 +199,7 @@
     errorHandler: errorHandler,
     removePins: removePins,
     removeAd: removeAd,
-    roomsOptionChangeHandler: roomsOptionChangeHandler
+    roomsOptionChangeHandler: roomsOptionChangeHandler,
+    accomodationChangeHandler: accomodationChangeHandler
   };
 })();

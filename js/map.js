@@ -50,6 +50,7 @@
     window.utils.filters.addEventListener('change', filterChangeHandler);
     window.filter.sortedAds = data;
     window.form.roomsOptionChangeHandler();
+    window.form.accomodationChangeHandler();
   };
 
   var errorHandler = function (errorMessage) {
