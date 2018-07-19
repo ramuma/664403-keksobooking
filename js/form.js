@@ -14,8 +14,6 @@
   var inputs = window.utils.adForm.querySelectorAll('input');
   var formReset = window.utils.adForm.querySelector('.ad-form__reset');
   var successPopup = document.querySelector('.success');
-  var featuresFieldset = window.utils.filters.querySelector('#housing-features');
-  var featuresItems = featuresFieldset.querySelectorAll('input');
   var MinPrice = {
     bungalo: 0,
     flat: 1000,
