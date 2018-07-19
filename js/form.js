@@ -110,15 +110,6 @@
     window.utils.mainPin.style.left = window.utils.map.offsetWidth / 2 - window.map.MainPin.WIDTH / 2 + 'px';
   };
 
-  var clearFilter = function () {
-    window.utils.filterFields.forEach(function (field) {
-      field.value = 'any';
-    });
-    featuresItems.forEach(function (feature) {
-      feature.checked = false;
-    });
-  };
-
   var addListeners = function () {
     typeOfAccommodation.addEventListener('change', accomodationChangeHandler);
     checkinSelect.addEventListener('change', checkinChangeHandler);
@@ -143,13 +134,14 @@
   var resetPage = function () {
     window.utils.map.classList.add('map--faded');
     window.utils.adForm.classList.add('ad-form--disabled');
-    adFormInputs.forEach(function (it) {
-      it.setAttribute('disabled', true);
+    adFormInputs.forEach(function (field) {
+      field.disabled = true;
     });
     window.utils.filterFields.forEach(function (field) {
       field.disabled = true;
     });
     window.utils.adForm.reset();
+    window.utils.filters.reset();
     removePins();
     removeAd();
     returnMainPin();
@@ -157,7 +149,6 @@
     removeError(titleInput);
     removeError(priceInput);
     removeListeners();
-    clearFilter();
     roomsOptionChangeHandler();
     accomodationChangeHandler();
   };

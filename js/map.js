@@ -42,6 +42,7 @@
     renderPins(window.filter.sortAds(window.filter.sortedAds).slice(0, PINS_NUMBER));
   });
 
+  window.utils.filters.addEventListener('change', filterChangeHandler);
   var successHandler = function (data) {
     renderPins(data.slice(0, PINS_NUMBER));
     window.utils.filterFields.forEach(function (it) {
