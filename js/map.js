@@ -4,7 +4,7 @@
   var PINS_NUMBER = 5;
   var TOP_PIN_LIMIT = 130;
   var BOTTOM_PIN_LIMIT = 630;
-  var MainPin = {
+  var mainPin = {
     WIDTH: 62,
     HEIGHT: 62,
     TAIL: 22,
@@ -13,17 +13,17 @@
   var PinDragLimits = {
     X: {
       MIN: 0,
-      MAX: window.utils.map.clientWidth - MainPin.WIDTH
+      MAX: window.utils.map.clientWidth - mainPin.WIDTH
     },
     Y: {
-      MIN: TOP_PIN_LIMIT - MainPin.TOTAL_HEIGHT,
-      MAX: BOTTOM_PIN_LIMIT - MainPin.TOTAL_HEIGHT
+      MIN: TOP_PIN_LIMIT - mainPin.TOTAL_HEIGHT,
+      MAX: BOTTOM_PIN_LIMIT - mainPin.TOTAL_HEIGHT
     }
   };
   var adFormInput = window.utils.adForm.querySelectorAll('.ad-form fieldset');
-  var mainPinX = Math.round(parseInt(window.utils.mainPin.style.left, 10) + MainPin.WIDTH / 2);
-  var mainPinYCenter = Math.round(parseInt(window.utils.mainPin.style.top, 10) + MainPin.HEIGHT / 2);
-  var mainPinYPointed = Math.round(parseInt(window.utils.mainPin.style.top, 10) + MainPin.HEIGHT + MainPin.TAIL);
+  var mainPinX = Math.round(parseInt(window.utils.mainPin.style.left, 10) + mainPin.WIDTH / 2);
+  var mainPinYCenter = Math.round(parseInt(window.utils.mainPin.style.top, 10) + mainPin.HEIGHT / 2);
+  var mainPinYPointed = Math.round(parseInt(window.utils.mainPin.style.top, 10) + mainPin.HEIGHT + mainPin.TAIL);
   var addressInput = document.querySelector('#address');
   var adTemplate = document.querySelector('template').content.querySelector('.map__card');
   var filtersContainer = window.utils.map.querySelector('.map__filters-container');
@@ -202,8 +202,8 @@
       } else if (top <= PinDragLimits.Y.MIN) {
         top = PinDragLimits.Y.MIN;
       }
-      var coordX = left + MainPin.WIDTH / 2;
-      var coordY = top + MainPin.TOTAL_HEIGHT;
+      var coordX = left + mainPin.WIDTH / 2;
+      var coordY = top + mainPin.TOTAL_HEIGHT;
 
       window.utils.mainPin.style.top = top + 'px';
       window.utils.mainPin.style.left = left + 'px';
@@ -221,7 +221,7 @@
   });
 
   window.map = {
-    MainPin: MainPin,
+    mainPin: mainPin,
     renderCard: renderCard,
     renderPins: renderPins,
     fillAddress: fillAddress,
