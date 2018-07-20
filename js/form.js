@@ -128,16 +128,16 @@
   var resetPage = function () {
     window.utils.map.classList.add('map--faded');
     window.utils.adForm.classList.add('ad-form--disabled');
+    window.utils.adForm.reset();
+    window.utils.filters.reset();
     adFormInputs.forEach(function (field) {
       field.disabled = true;
     });
     window.map.deactivateFilter();
-    window.utils.adForm.reset();
-    window.utils.filters.reset();
+    window.map.fillAddress(window.map.mainPinX, window.map.mainPinYCenter);
     removePins();
     removeAd();
     returnMainPin();
-    window.map.fillAddress(window.map.mainPinX, window.map.mainPinYCenter);
     removeError(titleInput);
     removeError(priceInput);
     removeListeners();

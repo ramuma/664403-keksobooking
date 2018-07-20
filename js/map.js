@@ -173,17 +173,8 @@
     });
   };
 
-  window.utils.mainPin.addEventListener('mouseup', function () {
-    if (!isMapActive()) {
-      document.removeEventListener('DOMContentLoaded', fillingAddressHandler);
-      activatePage();
-      fillAddress(mainPinX, mainPinYPointed);
-      window.form.addListeners();
-    }
-  });
-
   // Перемещение маркера
-  window.utils.mainPin.addEventListener('mousedown', function (evt) {
+  var mainPinMouseDownHandler = function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -228,12 +219,20 @@
     var mouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
 
+      if (!isMapActive()) {
+        document.removeEventListener('DOMContentLoaded', fillingAddressHandler);
+        activatePage();
+        fillAddress(mainPinX, mainPinYPointed);
+        window.form.addListeners();
+      }
+
       document.removeEventListener('mousemove', mouseMoveHandler);
       document.removeEventListener('mouseup', mouseUpHandler);
     };
     document.addEventListener('mousemove', mouseMoveHandler);
     document.addEventListener('mouseup', mouseUpHandler);
-  });
+  };
+  window.utils.mainPin.addEventListener('mousedown', mainPinMouseDownHandler);
 
   window.map = {
     MainPin: MainPin,
