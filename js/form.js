@@ -105,7 +105,7 @@
 
   var returnMainPin = function () {
     window.utils.mainPin.style.top = window.utils.map.offsetHeight / 2 + 'px';
-    window.utils.mainPin.style.left = window.utils.map.offsetWidth / 2 - window.map.MainPin.WIDTH / 2 + 'px';
+    window.utils.mainPin.style.left = window.utils.map.offsetWidth / 2 - window.map.mainPin.WIDTH / 2 + 'px';
   };
 
   var addListeners = function () {
