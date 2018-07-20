@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var priceLimits = {
+  var PriceLimits = {
     LOW: 10000,
     HIGH: 50000
   };
@@ -24,11 +24,11 @@
   var checkPrice = function (item) {
     switch (priceSelect.value) {
       case 'low':
-        return item.offer.price < priceLimits.LOW;
+        return item.offer.price < PriceLimits.LOW;
       case 'middle':
-        return item.offer.price >= priceLimits.LOW && item.offer.price <= priceLimits.HIGH;
+        return item.offer.price >= PriceLimits.LOW && item.offer.price <= PriceLimits.HIGH;
       case 'high':
-        return item.offer.price > priceLimits.HIGH;
+        return item.offer.price > PriceLimits.HIGH;
       default:
         return true;
     }

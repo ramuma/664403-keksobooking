@@ -1,6 +1,12 @@
 'use strict';
 
 (function () {
+  var minPrice = {
+    bungalo: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
+  };
   var typeOfAccommodation = window.utils.adForm.querySelector('#type');
   var priceInput = window.utils.adForm.querySelector('#price');
   var titleInput = window.utils.adForm.querySelector('#title');
@@ -14,12 +20,6 @@
   var inputs = window.utils.adForm.querySelectorAll('input');
   var formReset = window.utils.adForm.querySelector('.ad-form__reset');
   var successPopup = document.querySelector('.success');
-  var minPrice = {
-    bungalo: 0,
-    flat: 1000,
-    house: 5000,
-    palace: 10000
-  };
 
   var accomodationChangeHandler = function () {
     var accomodationMinPrice = minPrice[typeOfAccommodation.value];
@@ -101,7 +101,7 @@
 
   var returnMainPin = function () {
     window.utils.mainPin.style.top = window.utils.map.offsetHeight / 2 + 'px';
-    window.utils.mainPin.style.left = window.utils.map.offsetWidth / 2 - window.map.mainPin.WIDTH / 2 + 'px';
+    window.utils.mainPin.style.left = window.utils.map.offsetWidth / 2 - window.map.MainPin.WIDTH / 2 + 'px';
   };
 
   var addListeners = function () {
@@ -128,18 +128,16 @@
   var resetPage = function () {
     window.utils.map.classList.add('map--faded');
     window.utils.adForm.classList.add('ad-form--disabled');
+    window.utils.adForm.reset();
+    window.utils.filters.reset();
     adFormInputs.forEach(function (field) {
       field.disabled = true;
     });
-    window.utils.filterFields.forEach(function (field) {
-      field.disabled = true;
-    });
-    window.utils.adForm.reset();
-    window.utils.filters.reset();
+    window.map.deactivateFilter();
+    window.map.fillAddress(window.map.mainPinX, window.map.mainPinYCenter);
     removePins();
     removeAd();
     returnMainPin();
-    window.map.fillAddress(window.map.mainPinX, window.map.mainPinYCenter);
     removeError(titleInput);
     removeError(priceInput);
     removeListeners();
