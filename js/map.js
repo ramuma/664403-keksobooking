@@ -142,6 +142,7 @@
     adFormInputs.forEach(function (it) {
       it.removeAttribute('disabled', '');
     });
+    activateFilter();
   };
 
   var fillAddress = function (coordX, coordY) {
@@ -157,6 +158,19 @@
 
   var isMapActive = function () {
     return !(window.utils.map.classList.contains('map--faded'));
+  };
+
+  var deactivateFilter = function () {
+    window.utils.filterFields.forEach(function (field) {
+      field.disabled = true;
+    });
+  };
+  deactivateFilter();
+
+  var activateFilter = function () {
+    window.utils.filterFields.forEach(function (field) {
+      field.disabled = false;
+    });
   };
 
   window.utils.mainPin.addEventListener('mouseup', function () {
@@ -230,6 +244,8 @@
     mainPinX: mainPinX,
     mainPinYCenter: mainPinYCenter,
     mainPinYPointed: mainPinYPointed,
-    filterChangeHandler: filterChangeHandler
+    filterChangeHandler: filterChangeHandler,
+    activateFilter: activateFilter,
+    deactivateFilter: deactivateFilter
   };
 })();

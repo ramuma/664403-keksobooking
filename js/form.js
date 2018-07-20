@@ -131,9 +131,7 @@
     adFormInputs.forEach(function (field) {
       field.disabled = true;
     });
-    window.utils.filterFields.forEach(function (field) {
-      field.disabled = true;
-    });
+    window.map.deactivateFilter();
     window.utils.adForm.reset();
     window.utils.filters.reset();
     removePins();
