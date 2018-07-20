@@ -3,7 +3,7 @@
 (function () {
   var SUCCESS_STATUS = 200;
   var TIMEOUT = 10000;
-  var URL = {
+  var Url = {
     UPLOAD: 'https://js.dump.academy/keksobooking',
     DOWNLOAD: 'https://js.dump.academy/keksobooking/data'
   };
@@ -32,11 +32,13 @@
     xhr.open(method, url);
     return xhr;
   };
-  var download = function (successHandler, errorHandler) {
-    getXhr('GET', URL.DOWNLOAD, successHandler, errorHandler).send();
-  };
+
   var upload = function (successHandler, errorHandler, data) {
-    getXhr('POST', URL.UPLOAD, successHandler, errorHandler).send(data);
+    getXhr('POST', Url.UPLOAD, successHandler, errorHandler).send(data);
+  };
+
+  var download = function (successHandler, errorHandler) {
+    getXhr('GET', Url.DOWNLOAD, successHandler, errorHandler).send();
   };
 
   window.backend = {
