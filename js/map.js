@@ -20,7 +20,7 @@
       MAX: BOTTOM_PIN_LIMIT - mainPin.TOTAL_HEIGHT
     }
   };
-  var adFormInput = window.utils.adForm.querySelectorAll('.ad-form fieldset');
+  var adFormInputs = window.utils.adForm.querySelectorAll('.ad-form fieldset');
   var mainPinX = Math.round(parseInt(window.utils.mainPin.style.left, 10) + mainPin.WIDTH / 2);
   var mainPinYCenter = Math.round(parseInt(window.utils.mainPin.style.top, 10) + mainPin.HEIGHT / 2);
   var mainPinYPointed = Math.round(parseInt(window.utils.mainPin.style.top, 10) + mainPin.HEIGHT + mainPin.TAIL);
@@ -138,7 +138,7 @@
     window.backend.download(successHandler, errorHandler);
     window.utils.map.classList.remove('map--faded');
     window.utils.adForm.classList.remove('ad-form--disabled');
-    adFormInput.forEach(function (it) {
+    adFormInputs.forEach(function (it) {
       it.removeAttribute('disabled', '');
     });
   };

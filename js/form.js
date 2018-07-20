@@ -14,7 +14,7 @@
   var inputs = window.utils.adForm.querySelectorAll('input');
   var formReset = window.utils.adForm.querySelector('.ad-form__reset');
   var successPopup = document.querySelector('.success');
-  var MinPrice = {
+  var minPrice = {
     bungalo: 0,
     flat: 1000,
     house: 5000,
@@ -22,7 +22,7 @@
   };
 
   var accomodationChangeHandler = function () {
-    var accomodationMinPrice = MinPrice[typeOfAccommodation.value];
+    var accomodationMinPrice = minPrice[typeOfAccommodation.value];
     priceInput.setAttribute('min', accomodationMinPrice);
     priceInput.setAttribute('placeholder', accomodationMinPrice);
   };
@@ -73,11 +73,7 @@
   };
 
   var checkFieldValidity = function (item) {
-    if (item.validity.valid) {
-      removeError(item);
-    } else {
-      addError(item);
-    }
+    return item.validity.valid ? removeError(item) : addError(item);
   };
 
   var titleInputKeyupHandler = function () {
