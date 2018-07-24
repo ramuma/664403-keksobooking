@@ -245,6 +245,7 @@
     mainPinYPointed: mainPinYPointed,
     filterChangeHandler: filterChangeHandler,
     activateFilter: activateFilter,
-    deactivateFilter: deactivateFilter
+    deactivateFilter: deactivateFilter,
+    removeChildren: removeChildren
   };
 })();

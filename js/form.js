@@ -125,7 +125,17 @@
     window.utils.filters.removeEventListener('change', window.map.filterChangeHandler);
   };
 
+  var removeImages = function (parent, children) {
+    Array.prototype.forEach.call(children, function (child) {
+      parent.removeChild(child);
+    });
+  };
+
   var resetPage = function () {
+    window.imageLoad.avatarPreview.src = 'img/muffin-grey.svg';
+    var images = window.utils.adForm.querySelectorAll('.ad-form__photo:not(:nth-of-type(2))');
+    removeImages(window.imageLoad.photoContainer, images);
+    window.utils.adForm.querySelector('.ad-form__photo').classList.remove('visually-hidden');
     window.utils.map.classList.add('map--faded');
     window.utils.adForm.classList.add('ad-form--disabled');
     window.utils.adForm.reset();
